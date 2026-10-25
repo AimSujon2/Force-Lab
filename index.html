@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>বল (Force) - ইন্টারঅ্যাক্টিভ ল্যাব ও অটো-সলভার | StudyPulse</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Tiro+Bangla:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Hind Siliguri', 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .font-serif-bn {
+      font-family: 'Tiro Bangla', 'Hind Siliguri', serif;
+    }
+    input[type="range"] {
+      accent-color: #2563eb;
+      cursor: pointer;
+    }
+    .main-tab-btn.active {
+      background-color: #1d4ed8;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
+    }
+    .topic-tab-btn.active {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+      color: #ffffff;
+      border-color: #1d4ed8;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+    }
+    .preset-chip.active {
+      background-color: #dbeafe;
+      border-color: #2563eb;
+      color: #1e40af;
+      font-weight: 600;
+    }
+    .math-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #2563eb;
+    }
+    .fraction {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      vertical-align: middle;
+      margin: 0 0.25rem;
+      font-size: 0.92em;
+    }
+    .fraction .num {
+      border-bottom: 1.5px solid currentColor;
+      padding: 0 0.3rem 0.05rem;
+      line-height: 1.15;
+    }
+    .fraction .den {
+      padding: 0.05rem 0.3rem 0;
+      line-height: 1.15;
+    }
+    @media print {
+      body {
+        background: #ffffff !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      #viewPdf {
+        display: block !important;
+      }
+      .print-only-area {
+        display: block !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+      }
+      .page-break-item {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin-bottom: 18px;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
+
+  <!-- Toast Notification -->
+  <div id="toastBox" class="fixed bottom-5 right-5 z-50 hidden transition-all duration-300 transform translate-y-2 opacity-0 no-print">
+    <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center gap-3 text-sm font-medium">
+      <span id="toastIcon" class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">✓</span>
+      <span id="toastMsg">সমাধান প্রস্তুত হয়েছে!</span>
+    </div>
+  </div>
+
+  <!-- Top Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <a href="https://facebook.com/studypulse2904" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-700 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-blue-600/20 group-hover:scale-105 transition">
+            SP
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xl font-bold tracking-tight text-slate-900">Study<span class="text-blue-600">Pulse</span></span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">এসএসসি পদার্থবিজ্ঞান</span>
+            </div>
+            <p class="text-xs text-slate-500">অধ্যায় ৩: বল (Force) — ইন্টারঅ্যাক্টিভ ল্যাব ও সৃজনশীল অটো-সলভার</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Main View Navigation (Only Lab & Theory — Direct PDF Download is embedded inside every tab) -->
+      <nav class="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200">
+        <button type="button" id="navLabBtn" class="main-tab-btn active px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-1.5">
+          <span>🔬</span>
+          <span>ল্যাব ও অটো-সলভার</span>
+        </button>
+        <button type="button" id="navTheoryBtn" class="main-tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-slate-900 transition-all flex items-center gap-1.5">
+          <span>📚</span>
+          <span>তত্ত্ব ও সূত্রাবলি</span>
+        </button>
+        <!-- Hidden legacy button kept off-screen for backwards-compatible DOM checks -->
+        <button type="button" id="navPdfBtn" class="hidden" aria-hidden="true">
+          <span>📄</span>
+          <span>পিডিএফ শিট</span>
+          <span id="pdfQueueCountBadge">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
+
+    <!-- ==================== VIEW 1: INTERACTIVE LAB & AUTO-SOLVER ==================== -->
+    <section id="viewLab" class="space-y-6 no-print">
+
+      <!-- 5 Sub-Topic Selector Tabs -->
+      <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2.5 px-1 flex items-center justify-between">
+          <span>টপিক নির্বাচন করুন (প্রতিটি ট্যাবেই অ্যানিমেশন, সৃজনশীল সলভার এবং সরাসরি পিডিএফ ডাউনলোড যুক্ত)</span>
+          <span class="text-blue-600 font-bold hidden sm:inline">লাইভ সিঙ্ক সক্রিয় ●</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+          <button type="button" data-topic="friction" class="topic-tab-btn active text-left p-2.5 rounded-xl border border-slate-200 transition-all flex items-start gap-2.5 hover:border-blue-300">
+            <span class="text-xl mt-0.5">🚗</span>
+            <div>
+              <div class="font-bold text-xs sm:text-sm leading-snug">১. নিউটনের ২য় সূত্র ও ঘর্ষণ বল</div>
+              <div class="text-[11px] opacity-80 mt-0.5">চলন্ত গাড়িতে ভর যোগ ও বাধাদানকারী বল</div>
+            </div>
+          </button>
+          <button type="button" data-topic="collision" class="topic-tab-btn text-left p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 text-slate-800 transition-all flex items-start gap-2.5 hover:border-blue-300">
+            <span class="text-xl mt-0.5">💥</span>
+            <div>
+              <div class="font-bold text-xs sm:text-sm leading-snug">২. ভরবেগের সংরক্ষণ ও সংঘর্ষ</div>
+              <div class="text-[11px] opacity-75 mt-0.5">মিলিত বেগ ও গতিশক্তি বিশ্লেষণ</div>
+            </div>
+          </button>
+          <button type="button" data-topic="recoil" class="topic-tab-btn text-left p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 text-slate-800 transition-all flex items-start gap-2.5 hover:border-blue-300">
+            <span class="text-xl mt-0.5">🎯</span>
+            <div>
+              <div class="font-bold text-xs sm:text-sm leading-snug">৩. বন্দুকের পশ্চাৎ বেগ ও তক্তা ভেদ</div>
+              <div class="text-[11px] opacity-75 mt-0.5">পশ্চাৎ বেগ ও বাধাদানকারী বল</div>
+            </div>
+          </button>
+          <button type="button" data-topic="pulley" class="topic-tab-btn text-left p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 text-slate-800 transition-all flex items-start gap-2.5 hover:border-blue-300">
+            <span class="text-xl mt-0.5">⚙️</span>
+            <div>
+              <div class="font-bold text-xs sm:text-sm leading-snug">৪. কপিকল ব্যবস্থা (২ ও ৩ বস্তু)</div>
+              <div class="text-[11px] opacity-75 mt-0.5">সমান টান (T) বনাম ভিন্ন টান (T₁, T₂)</div>
+            </div>
+          </button>
+          <button type="button" data-topic="gravity" class="topic-tab-btn text-left p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 text-slate-800 transition-all flex items-start gap-2.5 hover:border-blue-300">
+            <span class="text-xl mt-0.5">🪐</span>
+            <div>
+              <div class="font-bold text-xs sm:text-sm leading-snug">৫. মহাকর্ষ বল ও অভিকর্ষজ ত্বরণ (g)</div>
+              <div class="text-[11px] opacity-75 mt-0.5">আকর্ষণ বল, g এর মান ও নিষ্ক্রিয় বিন্দু</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Lab Grid: Left = Canvas Animation (7 cols), Right = Controls & Presets (5 cols) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- Left Column: Interactive Canvas & Live Telemetry -->
+        <div class="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col gap-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div>
+              <h2 id="simTitle" class="text-lg font-bold text-slate-900">নিউটনের ২য় সূত্র, ঘর্ষণ ও চলন্ত গাড়িতে ভর সংযোজন</h2>
+              <p id="simSubtitle" class="text-xs text-slate-500">স্লাইডার পরিবর্তন করে অ্যানিমেশন চালান এবং চলন্ত অবস্থায় হঠাৎ ভর যোগ করে বেগের পরিবর্তন দেখুন</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <!-- Special Action Button for Topic 1: Drop Extra Mass on Moving Car -->
+              <button type="button" id="dropExtraMassBtn" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 transition flex items-center gap-1.5 shadow-sm">
+                <span>📦</span>
+                <span id="dropMassBtnText">হঠাৎ ভর যোগ করুন (+Δm)</span>
+              </button>
+              <button type="button" id="simPlayPauseBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white transition flex items-center gap-1.5 shadow-sm">
+                <span id="simPlayIcon">▶</span>
+                <span id="simPlayText">অ্যানিমেশন চালান</span>
+              </button>
+              <button type="button" id="simResetBtn" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition border border-slate-200">
+                ↺ রিসেট
+              </button>
+            </div>
+          </div>
+
+          <!-- Canvas Container -->
+          <div class="relative w-full h-72 sm:h-80 rounded-xl overflow-hidden bg-slate-900 border border-slate-800 shadow-inner">
+            <canvas id="labCanvas" class="w-full h-full block"></canvas>
+            <!-- Top Overlay Readout -->
+            <div id="canvasOverlayTop" class="absolute top-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+              <div class="flex items-center gap-2">
+                <span id="simStatusBadge" class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-200 border border-blue-400/30 backdrop-blur">
+                  প্রস্তুত (Ready)
+                </span>
+                <span id="extraMassBadge" class="hidden px-3 py-1 rounded-full text-xs font-bold bg-amber-500/25 text-amber-300 border border-amber-400/40 backdrop-blur">
+                  📦 অতিরিক্ত ভর যুক্ত (+250 kg)
+                </span>
+              </div>
+              <span id="simTimerBadge" class="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-slate-900/80 text-slate-200 border border-slate-700 backdrop-blur">
+                সময় t = 0.00 s
+              </span>
+            </div>
+          </div>
+
+          <!-- Live Telemetry Bar -->
+          <div id="telemetryGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <!-- Dynamically populated by JS based on active topic -->
+          </div>
+        </div>
+
+        <!-- Right Column: Board Presets & Parameter Sliders -->
+        <div class="lg:col-span-5 bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col gap-4">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-500">বোর্ড প্রশ্ন প্রিসেট (১-ক্লিক ইনপুট)</span>
+              <span class="text-[11px] text-blue-600 font-medium">ক্লিক করলে মান সেট হবে</span>
+            </div>
+            <div id="presetButtonsContainer" class="flex flex-wrap gap-2">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <div class="border-t border-slate-100 pt-3">
+            <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center justify-between">
+              <span>🎛️ ল্যাবের চলক ও ইনপুট প্যারামিটার</span>
+              <span class="text-xs font-normal text-slate-500">মান পরিবর্তন করুন</span>
+            </h3>
+            <div id="slidersContainer" class="space-y-3 max-h-[420px] overflow-y-auto pr-1">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== CUSTOM CQ INPUT & SMART PARSER PANEL (CONNECTED TO LAB & ANIMATION) ==================== -->
+      <div class="bg-gradient-to-br from-indigo-50/80 via-white to-blue-50/60 border-2 border-indigo-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-100 pb-3.5">
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-600 text-white text-[11px] font-bold mb-1">
+              <span>✍️ কাস্টম সৃজনশীল প্রশ্ন সলভার (অ্যানিমেশন সংযুক্ত)</span>
+            </div>
+            <h3 id="customCqHeading" class="text-lg font-bold text-slate-900">তোমার নিজের সৃজনশীল উদ্দীপক ও প্রশ্ন লিখে সমাধান ও অ্যানিমেশন দেখো</h3>
+            <p class="text-xs text-slate-600">এই টপিকের যেকোনো সৃজনশীল প্রশ্নের উদ্দীপক নিচে লিখলে বা পেস্ট করলে অ্যাপটি স্বয়ংক্রিয়ভাবে সংখ্যাগুলো চিনে ল্যাবের অ্যানিমেশন ও নিচের সমাধান আপডেট করবে।</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" id="loadSampleCqBtn" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 transition shadow-sm">
+              📋 নমুনা সৃজনশীল প্রশ্ন বসান
+            </button>
+            <button type="button" id="clearCustomCqBtn" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 transition">
+              ✕ মুছুন
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <!-- Stem Textarea -->
+          <div class="lg:col-span-6 flex flex-col">
+            <label for="customStemInput" class="text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+              <span>📝 উদ্দীপক লিখুন বা পেস্ট করুন (বাংলা বা ইংরেজি সংখ্যায়):</span>
+              <span class="text-[11px] text-indigo-600 font-normal">উদাহরণ: 1200 kg, 20 m/s, 45 m...</span>
+            </label>
+            <textarea id="customStemInput" rows="4" class="w-full p-3 rounded-xl border border-slate-300 bg-white text-sm text-slate-800 focus:outline-none focus:border-indigo-600 font-serif-bn leading-relaxed" placeholder="এখানে তোমার বই বা গাইডের সৃজনশীল উদ্দীপকটি লেখো..."></textarea>
+          </div>
+
+          <!-- Question G & Gh Inputs -->
+          <div class="lg:col-span-6 flex flex-col justify-between space-y-3">
+            <div>
+              <label for="customQ1Input" class="block text-xs font-bold text-slate-700 mb-1">❓ (গ) নম্বর প্রশ্ন (ঐচ্ছিক — ফাঁকা রাখলে ডিফল্ট প্রশ্ন থাকবে):</label>
+              <input type="text" id="customQ1Input" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm text-slate-800 focus:outline-none focus:border-indigo-600 font-serif-bn" placeholder="যেমন: (গ) উদ্দীপকের গাড়িটির মন্দন ও বাধাদানকারী বল নির্ণয় করো।">
+            </div>
+            <div>
+              <label for="customQ2Input" class="block text-xs font-bold text-slate-700 mb-1">❓ (ঘ) নম্বর প্রশ্ন (ঐচ্ছিক — ফাঁকা রাখলে ডিফল্ট প্রশ্ন থাকবে):</label>
+              <input type="text" id="customQ2Input" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm text-slate-800 focus:outline-none focus:border-indigo-600 font-serif-bn" placeholder="যেমন: (ঘ) গাড়িটি সামনের বাধাটিকে আঘাত না করে থামতে পারবে কি না? বিশ্লেষণ করো।">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+          <div id="parsedValuesFeedback" class="text-xs text-slate-600 bg-white/90 px-3 py-1.5 rounded-lg border border-slate-200">
+            💡 উদ্দীপক লিখে ডানপাশের বাটনে ক্লিক করলে শনাক্তকৃত মানগুলো এখানে দেখাবে এবং অ্যানিমেশন চালু হবে।
+          </div>
+          <button type="button" id="parseAndSolveCqBtn" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20 transition flex items-center gap-2">
+            <span>⚡</span>
+            <span>উদ্দীপক থেকে মান নিয়ে সমাধান ও অ্যানিমেশন চালান</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ==================== AUTO-SOLVED EXAM QUESTIONS & DIRECT PDF DOWNLOAD SECTION ==================== -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold mb-1.5">
+              <span>⚡ ধাপে ধাপে গাণিতিক সমাধান ও সরাসরি পিডিএফ ডাউনলোড</span>
+            </div>
+            <h2 id="questionsSectionTitle" class="text-xl font-bold text-slate-900">পরীক্ষায় আসার মতো গুরুত্বপূর্ণ সৃজনশীল প্রশ্ন ও সহজ ধাপে সমাধান</h2>
+            <p class="text-sm text-slate-600 mt-0.5">উপরের ল্যাবের স্লাইডার, প্রিসেট বা কাস্টম উদ্দীপক পরিবর্তন করলে নিচের সমাধান তাৎক্ষণিকভাবে আপডেট হবে এবং সরাসরি এখান থেকেই পিডিএফ ডাউনলোড করা যাবে।</p>
+          </div>
+
+          <!-- Direct In-Tab PDF Download Toolbar -->
+          <div class="flex flex-wrap items-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <input type="text" id="studentNameInput" placeholder="শিক্ষার্থীর নাম (ঐচ্ছিক)" class="px-3 py-2 rounded-lg border border-slate-300 bg-white text-xs sm:text-sm focus:outline-none focus:border-blue-600 w-44 sm:w-48">
+            <button type="button" id="quickDownloadTopicPdfBtn" class="px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white transition shadow-sm flex items-center gap-1.5">
+              <span>📥</span>
+              <span>এই টপিকের সমাধান পিডিএফ ডাউনলোড</span>
+            </button>
+            <button type="button" id="addAllTopicToPdfBtn" class="px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-slate-900 hover:bg-slate-800 text-white transition shadow-sm flex items-center gap-1.5">
+              <span>🖨️</span>
+              <span>প্রিন্ট / Save as PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Stem / Uddipok Box generated from current Lab State -->
+        <div id="liveStemBox" class="p-4 rounded-xl bg-gradient-to-r from-blue-50 via-indigo-50/60 to-slate-50 border border-blue-200">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Auto-Solved Questions List -->
+        <div id="solvedQuestionsGrid" class="grid grid-cols-1 gap-5">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== VIEW 2: THEORY & FORMULA CHEAT SHEET ==================== -->
+    <section id="viewTheory" class="hidden space-y-6 no-print">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">অধ্যায় ৩: বল (Force) — পূর্ণাঙ্গ সূত্র ও অনুধাবনমূলক নোট</h2>
+            <p class="text-sm text-slate-600 mt-1">এসএসসি পরীক্ষার ক ও খ নম্বর প্রশ্নের উত্তর এবং গাণিতিক সূত্রের সারসংক্ষেপ</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" id="addTheoryToPdfBtn" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white transition shadow-sm flex items-center gap-1.5">
+              <span>📥</span>
+              <span>সূত্র ও অনুধাবন নোট পিডিএফ ডাউনলোড</span>
+            </button>
+            <button type="button" id="printTheoryPdfBtn" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-900 hover:bg-slate-800 text-white transition shadow-sm flex items-center gap-1.5">
+              <span>🖨️</span>
+              <span>প্রিন্ট / Save as PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Formula Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+            <div class="text-xs font-bold text-blue-600 uppercase mb-1">১. নিউটনের ২য় সূত্র ও ঘর্ষণ বল</div>
+            <div class="text-lg font-bold text-slate-900 mb-1">F<sub>net</sub> = F - (μmg + f<sub>ext</sub>) = ma</div>
+            <p class="text-xs text-slate-600 leading-relaxed">অভিলম্বিক প্রতিক্রিয়া R = mg এবং গতীয় ঘর্ষণ বল f<sub>k</sub> = μR = μmg। চলন্ত গাড়ির ওপর হঠাৎ Δm ভর চাপানো হলে ভরবেগের সংরক্ষণে তাৎক্ষণিক বেগ u' = mu / (m + Δm)।</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+            <div class="text-xs font-bold text-blue-600 uppercase mb-1">২. কপিকলে টান (T₁ = T₂ বনাম T₁ ≠ T₂)</div>
+            <div class="text-lg font-bold text-slate-900 mb-1">T = <span class="fraction"><span class="num">2m₁m₃g</span><span class="den">m₁ + m₃</span></span> (২-বস্তুতে সমান)</div>
+            <p class="text-xs text-slate-600 leading-relaxed">২টি ঝুলন্ত বস্তুর ক্ষেত্রে (মসৃণ কপিকলে) পুরো সুতায় টান সমান থাকে (T₁ = T₂)। কিন্তু মাঝখানে টেবিলের ওপর m₂ ভর থাকলে |T₁ - T₂| = m₂a + f হওয়ায় দুই পাশের টান আলাদা হয়।</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+            <div class="text-xs font-bold text-blue-600 uppercase mb-1">৩. মহাকর্ষ বল ও অভিকর্ষজ ত্বরণ (g)</div>
+            <div class="text-lg font-bold text-slate-900 mb-1">F = G<span class="fraction"><span class="num">M₁M₂</span><span class="den">d²</span></span> , g' = g<span class="fraction"><span class="num">R²</span><span class="den">(R + h)²</span></span></div>
+            <p class="text-xs text-slate-600 leading-relaxed">G = 6.673 × 10⁻¹¹ Nm²kg⁻² এবং পৃথিবীর গড় ব্যাসার্ধ R = 6400 km। উচ্চতা বৃদ্ধির সাথে সাথে g' এবং বস্তুর ওজন W' = mg' হ্রাস পায়।</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+            <div class="text-xs font-bold text-blue-600 uppercase mb-1">৪. ভরবেগের সংরক্ষণশীলতা ও ঘাত বল</div>
+            <div class="text-lg font-bold text-slate-900 mb-1">m₁u₁ + m₂u₂ = (m₁ + m₂)v</div>
+            <p class="text-xs text-slate-600 leading-relaxed">মিলিত বেগ v = (m₁u₁ + m₂u₂) / (m₁ + m₂)। বলের ঘাত J = m(v - u) এবং সংঘর্ষকালীন ঘাত বল F = |J| / t।</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+            <div class="text-xs font-bold text-blue-600 uppercase mb-1">৫. বন্দুকের পশ্চাৎ বেগ ও তক্তা ভেদ</div>
+            <div class="text-lg font-bold text-slate-900 mb-1">MV + mv = 0 ⇒ V = - <span class="fraction"><span class="num">mv</span><span class="den">M</span></span></div>
+            <p class="text-xs text-slate-600 leading-relaxed">তক্তার পুরুত্ব s হলে মন্দন a = (v² - v₁²) / 2s এবং বাধাদানকারী বল F = ma। ১ম তক্তার পর অতিরিক্ত ভেদকৃত তক্তা n = v₁² / (v² - v₁²)।</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+            <div class="text-xs font-bold text-blue-600 uppercase mb-1">৬. মহাকর্ষীয় নিষ্ক্রিয় বিন্দু (লব্ধি বল শূন্য)</div>
+            <div class="text-lg font-bold text-slate-900 mb-1"><span class="fraction"><span class="num">M₁</span><span class="den">x²</span></span> = <span class="fraction"><span class="num">M₂</span><span class="den">(d - x)²</span></span> ⇒ x = <span class="fraction"><span class="num">d</span><span class="den">1 + √(M₂/M₁)</span></span></div>
+            <p class="text-xs text-slate-600 leading-relaxed">M₁ ভর হতে x দূরত্বে কোনো বস্তু রাখলে উভয় ভরের মহাকর্ষীয় আকর্ষণ বল সমান ও বিপরীতমুখী হওয়ায় লব্ধি বল শূন্য হয়।</p>
+          </div>
+        </div>
+
+        <!-- Important Conceptual Questions (অনুধাবনমূলক প্রশ্নোত্তর) -->
+        <h3 class="text-lg font-bold text-slate-900 mb-4">পরীক্ষায় আসার মতো গুরুত্বপূর্ণ অনুধাবনমূলক প্রশ্নোত্তর (খ নম্বর - ২ মার্কস)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border border-slate-200 bg-white">
+            <h4 class="font-bold text-blue-900 mb-1.5">১. চলন্ত বাস হঠাৎ ব্রেক করলে যাত্রীরা সামনের দিকে ঝুঁকে পড়ে কেন?</h4>
+            <p class="text-sm text-slate-700 leading-relaxed">গতি জড়তার কারণে এমনটি ঘটে। বাস যখন চলন্ত অবস্থায় থাকে, তখন যাত্রীর পুরো শরীর বাসের সাথে একই গতিতে গতিশীল থাকে। বাস হঠাৎ ব্রেক করলে যাত্রীর শরীরের নিচের অংশ বাসের সাথে স্থির হয়ে যায়, কিন্তু শরীরের উপরের অংশ গতি জড়তার কারণে সামনের দিকে এগিয়ে যেতে চায়। ফলে যাত্রী সামনের দিকে ঝুঁকে পড়ে।</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-white">
+            <h4 class="font-bold text-blue-900 mb-1.5">২. কপিকলে কখন সুতার টান সমান (T₁ = T₂) হয় এবং কখন আলাদা হয়?</h4>
+            <p class="text-sm text-slate-700 leading-relaxed">৯ম-১০ম শ্রেণির পাঠ্যবই অনুযায়ী, একটি ঘর্ষণহীন হালকা কপিকলের দুই প্রান্তে সরাসরি দুটি ভর (m₁ ও m₃) ঝুলানো থাকলে ভরহীন অভিন্ন সুতার সর্বত্র টান সমান থাকে (T₁ = T₂ = T)। কিন্তু সুতার মাঝখানে টেবিলের ওপর আরেকটি ভর (m₂) যুক্ত থাকলে মাঝের বস্তুটির জড়তা (m₂a) ও তলের ঘর্ষণ বল (f) অতিক্রম করতে দুই পাশের সুতার টানে পার্থক্য সৃষ্টি হয় (|T₁ - T₂| = m₂a + f)। কেবল ব্যবস্থাটি স্থির থাকলে (a = 0) এবং তলে কোনো ঘর্ষণ না থাকলে (f = 0) ৩-বস্তুর ক্ষেত্রেও T₁ = T₂ হয়।</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-white">
+            <h4 class="font-bold text-blue-900 mb-1.5">৩. জুতার তলায় খাঁজ কাটা থাকে কেন?</h4>
+            <p class="text-sm text-slate-700 leading-relaxed">হাঁটার সময় আমরা মাটির ওপর পেছনের দিকে তির্যকভাবে বল প্রয়োগ করি এবং ঘর্ষণ বলের কারণে মাটি আমাদের ওপর সামনের দিকে প্রতিক্রিয়া বল দেয়। জুতার তলায় খাঁজ কাটা থাকলে মাটি ও জুতার মধ্যকার ঘর্ষণ বল বৃদ্ধি পায়, ফলে পা পিছলে যাওয়ার সম্ভাবনা কমে এবং সহজে হাঁটা যায়।</p>
+          </div>
+          <div class="p-4 rounded-xl border border-slate-200 bg-white">
+            <h4 class="font-bold text-blue-900 mb-1.5">৪. বিষুবীয় অঞ্চল থেকে মেরু অঞ্চলের দিকে গেলে বস্তুর ওজন বৃদ্ধি পায় কেন?</h4>
+            <p class="text-sm text-slate-700 leading-relaxed">পৃথিবী সম্পূর্ণ গোলাকার নয়, উত্তর-দক্ষিণে কিছুটা চাপা। ফলে বিষুবীয় অঞ্চলে পৃথিবীর ব্যাসার্ধ (R) বেশি এবং মেরু অঞ্চলে ব্যাসার্ধ কম। যেহেতু অভিকর্ষজ ত্বরণ g = GM/R², তাই ব্যাসার্ধ কম হওয়ায় মেরু অঞ্চলে g এর মান বেশি (9.83 ms⁻²)। আর ওজন W = mg হওয়ায় মেরু অঞ্চলে বস্তুর ওজন বৃদ্ধি পায়।</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== HIDDEN / OFF-SCREEN A4 PDF RENDERING ENGINE (USED BY DIRECT DOWNLOAD & PRINT) ==================== -->
+    <section id="viewPdf" class="hidden space-y-6">
+      <!-- Hidden Legacy Toolbar Controls (Preserved for compatibility) -->
+      <div class="hidden no-print" aria-hidden="true">
+        <button type="button" id="addCurrentTopicToPdfFromSheetBtn">+ বর্তমান টপিকের প্রশ্ন যোগ করুন</button>
+        <button type="button" id="clearPdfQueueBtn">🗑️ তালিকা মুছুন</button>
+        <button type="button" id="downloadPdfFileBtn">
+          <span>📥</span>
+          <span>পিডিএফ ডাউনলোড (HTML2PDF)</span>
+        </button>
+        <button type="button" id="browserPrintPdfBtn">
+          <span>🖨️</span>
+          <span>প্রিন্ট / Save as PDF (ঝকঝকে বাংলা)</span>
+        </button>
+      </div>
+
+      <!-- Printable A4 Sheet Container -->
+      <div id="printableArea" class="print-only-area bg-white border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm max-w-4xl mx-auto">
+        <!-- Sheet Header -->
+        <div class="border-b-2 border-blue-700 pb-4 mb-6 flex items-center justify-between gap-4">
+          <div>
+            <div class="text-2xl font-bold text-slate-900 tracking-tight">Study<span class="text-blue-600">Pulse</span> <span class="text-sm font-semibold text-slate-500 ml-1">| এসএসসি পদার্থবিজ্ঞান প্রস্তুতি শিট</span></div>
+            <h1 id="pdfSheetMainHeading" class="text-lg font-bold text-blue-900 mt-1">অধ্যায় ৩: বল (Force) — গাণিতিক সমস্যা ও ধাপে ধাপে সমাধান</h1>
+            <p class="text-xs text-slate-500 mt-0.5">© ২০২৬ StudyPulse • Aim Sujon কর্তৃক পরিচালিত • facebook.com/studypulse2904 • facebook.com/aim.sujon</p>
+          </div>
+          <div class="text-right text-xs text-slate-600 space-y-1">
+            <div id="pdfStudentNameDisplay" class="font-bold text-slate-900 text-sm">শিক্ষার্থী: সাধারণ প্রস্তুতি শিট</div>
+            <div id="pdfDateDisplay">তারিখ: ২৫ অক্টোবর ২০২৬</div>
+          </div>
+        </div>
+
+        <!-- Sheet Items Container -->
+        <div id="pdfItemsContainer" class="space-y-6">
+          <!-- Populated dynamically when downloading PDF or printing -->
+        </div>
+
+        <!-- Sheet Footer -->
+        <div class="mt-8 pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+          <span>© ২০২৬ StudyPulse • Aim Sujon কর্তৃক পরিচালিত</span>
+          <span>facebook.com/studypulse2904 | facebook.com/aim.sujon</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-12 py-6 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-slate-600">
+      <div class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5">
+        <span>© ২০২৬</span>
+        <a href="https://facebook.com/studypulse2904" target="_blank" rel="noopener noreferrer" class="font-bold text-blue-600 hover:underline">StudyPulse</a>
+        <span>•</span>
+        <a href="https://facebook.com/aim.sujon" target="_blank" rel="noopener noreferrer" class="font-bold text-indigo-600 hover:underline">Aim Sujon</a>
+        <span>কর্তৃক পরিচালিত</span>
+      </div>
+      <div class="flex items-center gap-3 text-xs">
+        <a href="https://facebook.com/studypulse2904" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 font-semibold hover:bg-blue-100 transition border border-blue-200">
+          📘 পেইজ: facebook.com/studypulse2904
+        </a>
+        <a href="https://facebook.com/aim.sujon" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 font-semibold hover:bg-indigo-100 transition border border-indigo-200">
+          👤 প্রোফাইল: facebook.com/aim.sujon
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== APPLICATION JAVASCRIPT ==================== -->
+  <script>
+    (function() {
+      // ---------- STATE MANAGEMENT ----------
+      const state = {
+        activeMainTab: 'lab', // 'lab' | 'theory'
+        activeTopic: 'friction', // 'friction' | 'collision' | 'recoil' | 'pulley' | 'gravity'
+        isPlaying: false,
+        simTime: 0,
+        activePresetIndex: 0,
+
+        // Per-Topic Custom CQ Input State (Stem, Question G, Question Gh)
+        customCQ: {
+          friction: { stem: '', q1: '', q2: '' },
+          collision: { stem: '', q1: '', q2: '' },
+          recoil: { stem: '', q1: '', q2: '' },
+          pulley: { stem: '', q1: '', q2: '' },
+          gravity: { stem: '', q1: '', q2: '' }
+        },
+
+        // Topic 1: Friction, Direct Resistive Force & Live Mid-Motion Mass Addition
+        friction: {
+          m: 1000,           // গাড়ির আদি ভর (kg)
+          extraMass: 250,    // চলন্ত গাড়ির ওপর যুক্ত করা অতিরিক্ত ভর Δm (kg)
+          hasExtraMass: false, // বর্তমানে গাড়ির ওপর অতিরিক্ত ভর আছে কি না
+          dropAnimProg: 1,   // অ্যানিমেশন ট্র্যাকার (0 -> 1)
+          liveDist: 0,       // চলমান অ্যানিমেশনে তাৎক্ষণিক অতিক্রান্ত দূরত্ব (m)
+          liveVel: 20,       // চলমান অ্যানিমেশনে তাৎক্ষণিক বেগ (m/s)
+          u: 20,             // আদিবেগ (m/s)
+          F_app: 4000,       // প্রযুক্ত বল বা ব্রেকিং বল (N)
+          mu: 0.15,          // গতীয় ঘর্ষণ সহগ (μ)
+          f_ext: 300,        // সরাসরি বাধাদানকারী বল / বাতাসের বাধা (N)
+          t: 5,              // সময় (s)
+          d_obs: 50,         // বাধার দূরত্ব (m)
+          mode: 'accelerate' // 'accelerate' | 'brake'
+        },
+
+        // Topic 2: Collision & Momentum (ভরবেগের সংরক্ষণ ও সংঘর্ষ)
+        collision: {
+          m1: 600,      // ১ম বস্তুর ভর (kg)
+          u1: 15,       // ১ম বস্তুর আদিবেগ (m/s)
+          m2: 400,      // ২য় বস্তুর ভর (kg)
+          u2: -5,       // ২য় বস্তুর আদিবেগ (m/s, ঋণাত্মক মানে বিপরীত দিক)
+          t_imp: 0.2    // সংঘর্ষকাল (s)
+        },
+
+        // Topic 3: Gun Recoil & Bullet Plank Penetration (বন্দুক ও তক্তা ভেদ)
+        recoil: {
+          M: 5,         // বন্দুকের ভর (kg)
+          m_g: 20,      // গুলির ভর (g) -> হিসাবের সময় kg তে রূপান্তরিত হবে
+          v: 300,       // গুলির আদিবেগ (m/s)
+          s_cm: 6,      // তক্তার পুরুত্ব (cm) -> হিসাবের সময় m এ রূপান্তরিত হবে
+          u_ratio: 3    // ১টি তক্তা ভেদ করার পর বেগ কত ভাগ কমে (১/n অংশ হ্রাস পায়)
+        },
+
+        // Topic 4: Pulley System (Both 2-Body Standard NCTB T₁=T₂ & 3-Body Table System)
+        pulley: {
+          pMode: 'three_body', // 'two_body' (NCTB মেইন বই: T₁ = T₂ = T) | 'three_body' (কাঠের তলে m₂ সহ ৩-বস্তু)
+          m1: 12,       // ডানপাশের ঝুলন্ত ভারী বস্তুর ভর (kg)
+          m2: 5,        // কাঠের তলের ওপর রাখা মাঝের বস্তুর ভর (kg) [শুধু three_body মোডে কার্যকর]
+          m3: 4,        // বামপাশের ঝুলন্ত হালকা বস্তুর ভর (kg)
+          mu: 0.20,     // কাঠের তলের গতীয় ঘর্ষণ সহগ (μ)
+          f_table: 5,   // তলের অতিরিক্ত বা সরাসরি বাধাদানকারী বল (N)
+          t: 3          // গতির সময় (s)
+        },
+
+        // Topic 5: Universal Gravitation & Acceleration due to Gravity (g)
+        gravity: {
+          M1: 600,      // ১ম বস্তুর ভর (kg)
+          M2: 1200,     // ২য় বস্তুর ভর (kg)
+          d: 4,         // মধ্যবর্তী দূরত্ব (m)
+          h_km: 500,    // ভূপৃষ্ঠ হতে উচ্চতা (km)
+          m_sat: 200    // উপগ্রহ বা বস্তুর ভর (kg)
+        },
+
+        pdfQueue: []
+      };
+
+      // ---------- TOPIC CONFIGURATIONS & BOARD PRESETS ----------
+      const topicConfigs = {
+        friction: {
+          title: 'নিউটনের ২য় সূত্র, ঘর্ষণ, বাধাদানকারী বল ও চলন্ত গাড়িতে ভর সংযোজন',
+          subtitle: 'চলন্ত গাড়িতে "হঠাৎ ভর যোগ করুন" বাটনে ক্লিক করে অথবা ঘর্ষণ সহগ (μ) ও সরাসরি বাধাদানকারী বল পরিবর্তন করে ফলাফল দেখুন',
+          sampleCQ: {
+            stem: '১৪০০ কেজি ভরের একটি গাড়ি ২৫ m/s বেগে চলার সময় ৬০ মিটার সামনে একটি বাধা দেখে চালক ব্রেক চাপলেন। ফলে ৪৫০০ N ব্রেকিং বল এবং ৪০০ N অতিরিক্ত বাধাদানকারী বল কার্যকর হলো। রাস্তার গতীয় ঘর্ষণ সহগ 0.15।',
+            q1: 'গ) উদ্দীপকের গাড়িটির ওপর ক্রিয়াশীল মোট বাধাদানকারী বল ও কার্যকর মন্দন নির্ণয় করো।',
+            q2: 'ঘ) গাড়িটি সামনের বাধাটিকে আঘাত না করে নিরাপদে থামতে পারবে কি না? গাণিতিক যুক্তিসহ বিশ্লেষণ করো।'
+          },
+          presets: [
+            { name: 'ঢাকা বোর্ড (চলন্ত গাড়িতে ভর যোগ ও ত্বরণ)', values: { m: 1000, extraMass: 250, hasExtraMass: true, u: 15, F_app: 4500, mu: 0.15, f_ext: 300, t: 5, d_obs: 60, mode: 'accelerate' } },
+            { name: 'রাজশাহী বোর্ড (ব্রেকিং ও বাধাদানকারী বল)', values: { m: 1200, extraMass: 200, hasExtraMass: false, u: 22, F_app: 4000, mu: 0.15, f_ext: 500, t: 5, d_obs: 50, mode: 'brake' } },
+            { name: 'যশোর বোর্ড (ভারী মালবাহী ট্রাক)', values: { m: 1500, extraMass: 500, hasExtraMass: true, u: 20, F_app: 6000, mu: 0.12, f_ext: 400, t: 4, d_obs: 55, mode: 'brake' } },
+            { name: 'কুমিল্লা বোর্ড (শুধু সরাসরি বাধাদানকারী বল, μ=0)', values: { m: 500, extraMass: 100, hasExtraMass: false, u: 10, F_app: 2000, mu: 0.0, f_ext: 450, t: 6, d_obs: 80, mode: 'accelerate' } }
+          ],
+          sliders: [
+            { key: 'mode', label: 'গতির ধরন (Mode)', type: 'select', options: [
+              { val: 'accelerate', text: 'সম্মুখ বল প্রয়োগে ত্বরণ (গতি বৃদ্ধি)' },
+              { val: 'brake', text: 'ব্রেক প্রয়োগে মন্দন (গাড়ি থামানো)' }
+            ]},
+            { key: 'm', label: 'গাড়ির আদি ভর (m)', min: 50, max: 2500, step: 50, unit: 'kg' },
+            { key: 'extraMass', label: 'হঠাৎ যুক্ত করা অতিরিক্ত ভর (Δm)', min: 10, max: 1000, step: 10, unit: 'kg' },
+            { key: 'u', label: 'গাড়ির আদিবেগ (u)', min: 0, max: 40, step: 1, unit: 'ms⁻¹' },
+            { key: 'F_app', label: 'প্রযুক্ত বল / ব্রেকিং বল (F)', min: 50, max: 10000, step: 50, unit: 'N' },
+            { key: 'mu', label: 'গতীয় ঘর্ষণ সহগ (μ)', min: 0, max: 0.6, step: 0.01, unit: '' },
+            { key: 'f_ext', label: 'সরাসরি বাধাদানকারী বল (f_ext)', min: 0, max: 3000, step: 25, unit: 'N' },
+            { key: 't', label: 'পর্যবেক্ষণ সময় (t)', min: 1, max: 15, step: 0.5, unit: 's' },
+            { key: 'd_obs', label: 'সামনে বাধার দূরত্ব (d)', min: 10, max: 150, step: 5, unit: 'm' }
+          ]
+        },
+
+        collision: {
+          title: 'ভরবেগের সংরক্ষণশীলতা ও সংঘর্ষ সিমুলেটর',
+          subtitle: 'দুটি বস্তুর ভর ও বেগ নির্ধারণ করে সংঘর্ষের পর মিলিত বেগ এবং গতিশক্তির সংরক্ষণশীলতা যাচাই করুন',
+          sampleCQ: {
+            stem: '800 kg ভরের একটি ট্রাক 20 m/s বেগে চলার সময় বিপরীত দিক থেকে 10 m/s বেগে আসা 400 kg ভরের একটি প্রাইভেট কারকে ধাক্কা দিল। সংঘর্ষের পর গাড়ি দুটি মিলিত হয়ে একত্রে চলতে থাকল। সংঘর্ষকাল ছিল 0.25 s।',
+            q1: 'গ) সংঘর্ষের পর মিলিত গাড়ি দুটির বেগ কত হবে এবং তারা কোন দিকে চলবে নির্ণয় করো।',
+            q2: 'ঘ) উদ্দীপকের সংঘর্ষে ভরবেগ ও গতিশক্তি উভয়ই সংরক্ষিত হয়েছে কি না? গাণিতিক বিশ্লেষণের মাধ্যমে মতামত দাও।'
+          },
+          presets: [
+            { name: 'চট্টগ্রাম বোর্ড (মুখোমুখি সংঘর্ষ)', values: { m1: 600, u1: 15, m2: 400, u2: -5, t_imp: 0.2 } },
+            { name: 'দিনাজপুর বোর্ড (একই দিকে গতিশীল)', values: { m1: 800, u1: 20, m2: 1200, u2: 10, t_imp: 0.25 } },
+            { name: 'সিলেট বোর্ড (স্থির বস্তুকে ধাক্কা)', values: { m1: 500, u1: 18, m2: 1000, u2: 0, t_imp: 0.15 } },
+            { name: 'বরিশাল বোর্ড (ভারী ট্রাক ও কার)', values: { m1: 1500, u1: 12, m2: 500, u2: -20, t_imp: 0.1 } }
+          ],
+          sliders: [
+            { key: 'm1', label: '১ম বস্তুর ভর (m₁)', min: 50, max: 2000, step: 50, unit: 'kg' },
+            { key: 'u1', label: '১ম বস্তুর আদিবেগ (u₁)', min: 2, max: 35, step: 1, unit: 'ms⁻¹' },
+            { key: 'm2', label: '২য় বস্তুর ভর (m₂)', min: 50, max: 2000, step: 50, unit: 'kg' },
+            { key: 'u2', label: '২য় বস্তুর আদিবেগ (u₂) [বিপরীত হলে ঋণাত্মক]', min: -30, max: 25, step: 1, unit: 'ms⁻¹' },
+            { key: 't_imp', label: 'সংঘর্ষকাল (t)', min: 0.05, max: 1.0, step: 0.05, unit: 's' }
+          ]
+        },
+
+        recoil: {
+          title: 'বন্দুকের পশ্চাৎ বেগ ও তক্তা ভেদ সিমুলেটর',
+          subtitle: 'গুলি ছোড়ার পর বন্দুকের পশ্চাৎ বেগ এবং কাঠের তক্তায় গুলির বাধাদানকারী বল ও ভেদক্ষমতা বিশ্লেষণ করুন',
+          sampleCQ: {
+            stem: '6 kg ভরের একটি রাইফেল থেকে 15 g ভরের একটি বুলেট 400 m/s বেগে ছোড়া হলো। বুলেটটি সামনে রাখা 5 cm পুরুত্বের একটি কাঠের তক্তা ভেদ করায় এর বেগ ১/৩ অংশ হ্রাস পেল।',
+            q1: 'গ) উদ্দীপকের রাইফেলটির পশ্চাৎ বেগ এবং তক্তার বাধাদানকারী বলের মান নির্ণয় করো।',
+            q2: 'ঘ) প্রথম তক্তাটি ভেদ করার পর বুলেটটি অনুরূপ আরও কয়টি তক্তা ভেদ করতে পারবে? গাণিতিক বিশ্লেষণ করো।'
+          },
+          presets: [
+            { name: 'ঢাকা ও ময়মনসিংহ বোর্ড (বেগ ১/৩ অংশ হ্রাস)', values: { M: 5, m_g: 20, v: 300, s_cm: 6, u_ratio: 3 } },
+            { name: 'রাজশাহী বোর্ড (বেগ ১/৫ অংশ হ্রাস — একাধিক তক্তা ভেদ)', values: { M: 6, m_g: 15, v: 400, s_cm: 5, u_ratio: 5 } },
+            { name: 'যশোর বোর্ড (উচ্চগতির বুলেট — ১/২ অংশ হ্রাস)', values: { M: 4, m_g: 10, v: 500, s_cm: 5, u_ratio: 2 } }
+          ],
+          sliders: [
+            { key: 'M', label: 'বন্দুকের ভর (M)', min: 1, max: 12, step: 0.5, unit: 'kg' },
+            { key: 'm_g', label: 'গুলির ভর (m)', min: 5, max: 100, step: 5, unit: 'g' },
+            { key: 'v', label: 'গুলির আদিবেগ (v)', min: 100, max: 600, step: 10, unit: 'ms⁻¹' },
+            { key: 's_cm', label: '১টি তক্তার পুরুত্ব (s)', min: 2, max: 20, step: 1, unit: 'cm' },
+            { key: 'u_ratio', label: '১টি তক্তা ভেদে বেগ হ্রাসের ভগ্নাংশ (১/n অংশ কমে)', min: 2, max: 12, step: 1, unit: 'ভাগ (n)' }
+          ]
+        },
+
+        pulley: {
+          title: 'কপিকল ব্যবস্থা — ২-বস্তু (সমান টান T₁=T₂) ও ৩-বস্তু (কাঠের তলে m₂ সহ)',
+          subtitle: 'পাঠ্যবইয়ের সাধারণ কপিকলে সুতার টান সর্বত্র সমান (T₁=T₂), আর মাঝখানে টেবিলের ওপর m₂ ভর থাকলে দুই পাশের টান ভিন্ন হয়—দুটিই পরীক্ষা করুন',
+          sampleCQ: {
+            stem: 'একটি কাঠের টেবিলের ওপর 6 kg ভরের একটি ব্লক রাখা আছে। ব্লকটির দুই পাশে সুতার সাহায্যে কপিকলের মাধ্যমে ডানপাশে 15 kg এবং বামপাশে 5 kg ভরের দুটি বস্তু ঝুলানো আছে। কাঠের তলের গতীয় ঘর্ষণ সহগ 0.15 এবং অতিরিক্ত বাধাদানকারী বল 10 N। পরবর্তীতে ৩ সেকেন্ড ধরে এদের গতি পর্যবেক্ষণ করা হলো।',
+            q1: 'গ) উদ্দীপকের কপিকল ব্যবস্থার সাধারণ ত্বরণ এবং তলের মোট ঘর্ষণ বল নির্ণয় করো।',
+            q2: 'ঘ) উভয় পাশের সুতার টান (T₁ ও T₂) সমান হবে কি না এবং 3 সেকেন্ডে বস্তুগুলো কত দূরত্ব অতিক্রম করবে? বিশ্লেষণ করো।'
+          },
+          presets: [
+            { name: 'NCTB পাঠ্যবই (২-বস্তুর কপিকল: টান T₁ = T₂ সমান)', values: { pMode: 'two_body', m1: 8, m2: 5, m3: 5, mu: 0.0, f_table: 0, t: 3 } },
+            { name: 'সমন্বিত বোর্ড (৩-বস্তু: কাঠের তলে ঘর্ষণসহ)', values: { pMode: 'three_body', m1: 12, m2: 5, m3: 4, mu: 0.20, f_table: 0, t: 3 } },
+            { name: 'ঢাকা বোর্ড (৩-বস্তু: সরাসরি বাধাদানকারী বলসহ)', values: { pMode: 'three_body', m1: 15, m2: 6, m3: 5, mu: 0.15, f_table: 12, t: 4 } },
+            { name: 'সাম্যাবস্থা (৩-বস্তু স্থির ও ঘর্ষণহীন: T₁ = T₂ সমান)', values: { pMode: 'three_body', m1: 10, m2: 6, m3: 10, mu: 0.0, f_table: 0, t: 3 } }
+          ],
+          sliders: [
+            { key: 'pMode', label: 'কপিকলের ধরন (Pulley Type)', type: 'select', options: [
+              { val: 'two_body', text: '২-বস্তুর সাধারণ কপিকল (NCTB বই: সুতার টান T₁ = T₂ সমান)' },
+              { val: 'three_body', text: '৩-বস্তুর কপিকল (কাঠের তলের ওপর m₂ ও দুই পাশে m₁, m₃ ঝুলন্ত)' }
+            ]},
+            { key: 'm1', label: 'ডানপাশের ঝুলন্ত বস্তুর ভর (m₁)', min: 1, max: 30, step: 1, unit: 'kg' },
+            { key: 'm3', label: 'বামপাশের ঝুলন্ত বস্তুর ভর (m₃)', min: 1, max: 25, step: 1, unit: 'kg' },
+            { key: 'm2', label: 'কাঠের তলের ওপর রাখা বস্তুর ভর (m₂) [৩-বস্তু মোডে]', min: 1, max: 25, step: 1, unit: 'kg' },
+            { key: 'mu', label: 'কাঠের তলের গতীয় ঘর্ষণ সহগ (μ) [৩-বস্তু মোডে]', min: 0, max: 0.6, step: 0.01, unit: '' },
+            { key: 'f_table', label: 'সরাসরি বাধাদানকারী বল (f_ext) [৩-বস্তু মোডে]', min: 0, max: 100, step: 1, unit: 'N' },
+            { key: 't', label: 'গতির সময়কাল (t)', min: 1, max: 8, step: 0.5, unit: 's' }
+          ]
+        },
+
+        gravity: {
+          title: 'মহাকর্ষ বল ও অভিকর্ষজ ত্বরণ (g) বিশ্লেষক ল্যাব',
+          subtitle: 'দুটি বস্তুর মধ্যবর্তী মহাকর্ষীয় আকর্ষণ বল, নিষ্ক্রিয় বিন্দু এবং উচ্চতার সাথে অভিকর্ষজ ত্বরণ (g) এর পরিবর্তন নির্ণয় করুন',
+          sampleCQ: {
+            stem: 'মহাকর্ষ পরীক্ষণে 900 kg এবং 1600 kg ভরের দুটি গোলক পরস্পর হতে 5 m দূরত্বে স্থাপন করা হলো। অপরদিকে 150 kg ভরের একটি কৃত্রিম উপগ্রহকে ভূপৃষ্ঠ হতে 800 km উচ্চতায় উৎক্ষেপণ করা হলো।',
+            q1: 'গ) গোলক দুটির মধ্যকার মহাকর্ষ বল এবং 800 km উচ্চতায় অভিকর্ষজ ত্বরণ ও উপগ্রহটির ওজন নির্ণয় করো।',
+            q2: 'ঘ) গোলক দুটির সংযোজক সরলরেখার ঠিক কোথায় অন্য একটি বস্তু রাখলে তার ওপর লব্ধি মহাকর্ষ বল শূন্য হবে? বিশ্লেষণ করো।'
+          },
+          presets: [
+            { name: 'ঢাকা বোর্ড (মহাকর্ষ বল ও নিষ্ক্রিয় বিন্দু)', values: { M1: 600, M2: 1200, d: 4, h_km: 500, m_sat: 200 } },
+            { name: 'রাজশাহী বোর্ড (উচ্চতায় g এর মান ও ওজন)', values: { M1: 1000, M2: 2500, d: 5, h_km: 1600, m_sat: 120 } },
+            { name: 'সিলেট বোর্ড (সমান ভরের গোলকদ্বয়)', values: { M1: 800, M2: 800, d: 2.5, h_km: 3200, m_sat: 150 } }
+          ],
+          sliders: [
+            { key: 'M1', label: '১ম গোলকের ভর (M₁)', min: 50, max: 5000, step: 50, unit: 'kg' },
+            { key: 'M2', label: '২য় গোলকের ভর (M₂)', min: 50, max: 5000, step: 50, unit: 'kg' },
+            { key: 'd', label: 'গোলকদ্বয়ের কেন্দ্রিক দূরত্ব (d)', min: 0.5, max: 20, step: 0.5, unit: 'm' },
+            { key: 'h_km', label: 'ভূপৃষ্ঠ হতে বস্তুর উচ্চতা (h)', min: 0, max: 6400, step: 100, unit: 'km' },
+            { key: 'm_sat', label: 'উচ্চতায় থাকা বস্তুর ভর (m)', min: 10, max: 1000, step: 10, unit: 'kg' }
+          ]
+        }
+      };
+
+      // ---------- HELPER FUNCTIONS ----------
+      function fmt(num, decimals = 2) {
+        if (!Number.isFinite(num)) return '0';
+        const rounded = Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
+        return rounded.toString();
+      }
+
+      // Format scientific notation cleanly as "a × 10^b" (both HTML sup and plain Unicode sup)
+      function fmtSciHtml(num, decimals = 3) {
+        if (!Number.isFinite(num) || num === 0) return '0';
+        const expStr = num.toExponential(decimals);
+        const parts = expStr.split('e');
+        const mantissa = parseFloat(parts[0]).toString();
+        const exp = parseInt(parts[1], 10);
+        if (exp === 0) return mantissa;
+        return `${mantissa} × 10<sup>${exp}</sup>`;
+      }
+
+      function fmtSciText(num, decimals = 3) {
+        if (!Number.isFinite(num) || num === 0) return '0';
+        const supMap = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+        const expStr = num.toExponential(decimals);
+        const parts = expStr.split('e');
+        const mantissa = parseFloat(parts[0]).toString();
+        const exp = parseInt(parts[1], 10);
+        if (exp === 0) return mantissa;
+        const supExp = String(exp).split('').map(ch => supMap[ch] || ch).join('');
+        return `${mantissa} × 10${supExp}`;
+      }
+
+      function toEnDigits(str) {
+        return String(str).replace(/[০-৯]/g, d => '০১২৩৪৫৬৭৮৯'.indexOf(d));
+      }
+
+      function showToast(message) {
+        const box = document.getElementById('toastBox');
+        const msg = document.getElementById('toastMsg');
+        msg.textContent = message;
+        box.classList.remove('hidden', 'translate-y-2', 'opacity-0');
+        setTimeout(() => {
+          box.classList.add('translate-y-2', 'opacity-0');
+          setTimeout(() => box.classList.add('hidden'), 300);
+        }, 2600);
+      }
+
+      // ---------- SMART NATURAL LANGUAGE BENGALI/ENGLISH CQ PARSER ----------
+      function syncCustomCqInputsWithTopic() {
+        const cq = state.customCQ[state.activeTopic];
+        document.getElementById('customStemInput').value = cq.stem || '';
+        document.getElementById('customQ1Input').value = cq.q1 || '';
+        document.getElementById('customQ2Input').value = cq.q2 || '';
+        document.getElementById('parsedValuesFeedback').innerHTML =
+          '💡 এই টপিকের যেকোনো উদ্দীপক লিখে ডানপাশের বাটনে ক্লিক করলে স্বয়ংক্রিয়ভাবে মানগুলো ল্যাবের স্লাইডারে বসে যাবে এবং অ্যানিমেশন চালু হবে।';
+      }
+
+      function parseCustomCqTextAndSyncLab() {
+        const rawStem = document.getElementById('customStemInput').value.trim();
+        const rawQ1 = document.getElementById('customQ1Input').value.trim();
+        const rawQ2 = document.getElementById('customQ2Input').value.trim();
+
+        state.customCQ[state.activeTopic] = { stem: rawStem, q1: rawQ1, q2: rawQ2 };
+
+        if (!rawStem) {
+          showToast('অনুগ্রহ করে আগে উদ্দীপক বক্সে প্রশ্নটি লিখুন বা নমুনা প্রশ্নে ক্লিক করুন!');
+          return;
+        }
+
+        const norm = toEnDigits(rawStem + ' ' + rawQ1 + ' ' + rawQ2);
+        const extractedSummary = [];
+
+        function findAllWithUnit(regex) {
+          const matches = [];
+          let m;
+          while ((m = regex.exec(norm)) !== null) {
+            const v = parseFloat(m[1]);
+            if (!Number.isNaN(v)) matches.push(v);
+          }
+          return matches;
+        }
+
+        const kgVals = findAllWithUnit(/(-?\d+(?:\.\d+)?)\s*(?:kg|কেজি|কিলোগ্রাম)/gi);
+        const gVals = findAllWithUnit(/(-?\d+(?:\.\d+)?)\s*(?:g\b|gm\b|গ্রাম)/gi);
+        const msVals = findAllWithUnit(/(-?\d+(?:\.\d+)?)\s*(?:ms⁻¹|m\s*s⁻¹|ms\^-1|m\s*s\^-1|m\/s|মি\.?\/সে\.?|মিটার\/সেকেন্ড)/gi);
+        const kmhVals = findAllWithUnit(/(-?\d+(?:\.\d+)?)\s*(?:kmh⁻¹|km\s*h⁻¹|km\^-1|km\/h|কি\.?মি\.?\/ঘণ্টা)/gi);
+        const nVals = findAllWithUnit(/(-?\d+(?:\.\d+)?)\s*(?:N\b|নিউটন)/gi);
+        const sVals = findAllWithUnit(/(-?\d+(?:\.\d+)?)\s*(?:s\b|sec\b|সেকেন্ড)/gi);
+        const cmVals = findAllWithUnit(/(-?\d+(?:\.\d+)?)\s*(?:cm\b|সে\.?মি\.?|সেন্টিমিটার)/gi);
+        const kmVals = findAllWithUnit(/(-?\d+(?:\.\d+)?)\s*(?:km\b|কি\.?মি\.?|কিলোমিটার)/gi);
+        const mDistVals = findAllWithUnit(/(-?\d+(?:\.\d+)?)\s*(?:m\b|মিটার)(?!\s*\/|\s*s)/gi);
+
+        // Convert any km/h velocities into m/s
+        kmhVals.forEach(v => msVals.push(Math.round((v / 3.6) * 100) / 100));
+
+        // Extract friction coefficient mu (usually 0.01 to 0.95 or after সহগ / μ)
+        const muMatch = norm.match(/(?:সহগ|μ|mu)\s*[=:হলো]*\s*(0\.\d+)/i) || norm.match(/\b(0\.\d+)\b/);
+        const muVal = muMatch ? parseFloat(muMatch[1]) : null;
+
+        if (state.activeTopic === 'friction') {
+          const st = state.friction;
+          if (/ব্রেক|থাম|বাধা|মন্দন/i.test(norm)) {
+            st.mode = 'brake';
+          } else if (/ত্বরণ|বল প্রয়োগ/i.test(norm)) {
+            st.mode = 'accelerate';
+          }
+          if (kgVals.length >= 1) { st.m = kgVals[0]; extractedSummary.push(`m=${st.m}kg`); }
+          if (kgVals.length >= 2) {
+            st.extraMass = kgVals[1];
+            st.hasExtraMass = true;
+            extractedSummary.push(`Δm=${st.extraMass}kg`);
+          } else {
+            st.hasExtraMass = false;
+          }
+          if (msVals.length >= 1) { st.u = Math.abs(msVals[0]); extractedSummary.push(`u=${st.u}m/s`); }
+          else if (/স্থির অবস্থান/i.test(norm)) { st.u = 0; extractedSummary.push(`u=0m/s`); }
+          if (nVals.length >= 1) { st.F_app = nVals[0]; extractedSummary.push(`F=${st.F_app}N`); }
+          if (nVals.length >= 2) { st.f_ext = nVals[1]; extractedSummary.push(`f_ext=${st.f_ext}N`); }
+          if (muVal !== null) { st.mu = muVal; extractedSummary.push(`μ=${st.mu}`); }
+          if (mDistVals.length >= 1) { st.d_obs = mDistVals[0]; extractedSummary.push(`d=${st.d_obs}m`); }
+          if (sVals.length >= 1) { st.t = sVals[0]; extractedSummary.push(`t=${st.t}s`); }
+        }
+
+        else if (state.activeTopic === 'collision') {
+          const st = state.collision;
+          if (kgVals.length >= 1) { st.m1 = kgVals[0]; extractedSummary.push(`m₁=${st.m1}kg`); }
+          if (kgVals.length >= 2) { st.m2 = kgVals[1]; extractedSummary.push(`m₂=${st.m2}kg`); }
+          if (msVals.length >= 1) { st.u1 = Math.abs(msVals[0]); extractedSummary.push(`u₁=${st.u1}m/s`); }
+          if (msVals.length >= 2) {
+            const isOpposite = /বিপরীত|মুখোমুখি/i.test(norm);
+            st.u2 = isOpposite ? -Math.abs(msVals[1]) : msVals[1];
+            extractedSummary.push(`u₂=${st.u2}m/s`);
+          } else if (/স্থির/i.test(norm)) {
+            st.u2 = 0;
+            extractedSummary.push(`u₂=0m/s`);
+          }
+          if (sVals.length >= 1) { st.t_imp = sVals[0]; extractedSummary.push(`t=${st.t_imp}s`); }
+        }
+
+        else if (state.activeTopic === 'recoil') {
+          const st = state.recoil;
+          if (kgVals.length >= 1) { st.M = kgVals[0]; extractedSummary.push(`M=${st.M}kg`); }
+          if (gVals.length >= 1) { st.m_g = gVals[0]; extractedSummary.push(`m=${st.m_g}g`); }
+          if (msVals.length >= 1) { st.v = Math.abs(msVals[0]); extractedSummary.push(`v=${st.v}m/s`); }
+          if (cmVals.length >= 1) { st.s_cm = cmVals[0]; extractedSummary.push(`s=${st.s_cm}cm`); }
+          const fracMatch = norm.match(/1\s*\/\s*(\d+)/);
+          if (fracMatch) {
+            st.u_ratio = Math.max(2, parseInt(fracMatch[1], 10));
+            extractedSummary.push(`বেগ হ্রাস=১/${st.u_ratio}`);
+          } else if (/অর্ধেক/i.test(norm)) {
+            st.u_ratio = 2;
+            extractedSummary.push(`বেগ হ্রাস=১/২`);
+          } else if (/এক[\s-]*তৃতীয়াংশ/i.test(norm)) {
+            st.u_ratio = 3;
+            extractedSummary.push(`বেগ হ্রাস=১/৩`);
+          } else if (/এক[\s-]*চতুর্থাংশ/i.test(norm)) {
+            st.u_ratio = 4;
+            extractedSummary.push(`বেগ হ্রাস=১/৪`);
+          }
+        }
+
+        else if (state.activeTopic === 'pulley') {
+          const st = state.pulley;
+          if (kgVals.length >= 3 || /টেবিল|কাঠের|তিনটি/i.test(norm)) {
+            st.pMode = 'three_body';
+            if (kgVals.length >= 3) {
+              const firstThree = [...kgVals].slice(0, 3);
+              st.m2 = firstThree[0];
+              st.m1 = Math.max(firstThree[1], firstThree[2]);
+              st.m3 = Math.min(firstThree[1], firstThree[2]);
+              extractedSummary.push(`m₁=${st.m1}kg, m₂=${st.m2}kg, m₃=${st.m3}kg`);
+            }
+          } else if (kgVals.length === 2) {
+            st.pMode = 'two_body';
+            st.m1 = Math.max(kgVals[0], kgVals[1]);
+            st.m3 = Math.min(kgVals[0], kgVals[1]);
+            extractedSummary.push(`m₁=${st.m1}kg, m₃=${st.m3}kg (২-বস্তু)`);
+          }
+          if (muVal !== null) { st.mu = muVal; extractedSummary.push(`μ=${st.mu}`); }
+          if (nVals.length >= 1) { st.f_table = nVals[0]; extractedSummary.push(`f_ext=${st.f_table}N`); }
+          if (sVals.length >= 1) { st.t = sVals[0]; extractedSummary.push(`t=${st.t}s`); }
+        }
+
+        else if (state.activeTopic === 'gravity') {
+          const st = state.gravity;
+          if (kgVals.length >= 1) { st.M1 = kgVals[0]; extractedSummary.push(`M₁=${st.M1}kg`); }
+          if (kgVals.length >= 2) { st.M2 = kgVals[1]; extractedSummary.push(`M₂=${st.M2}kg`); }
+          if (kgVals.length >= 3) { st.m_sat = kgVals[2]; extractedSummary.push(`m=${st.m_sat}kg`); }
+          if (mDistVals.length >= 1) { st.d = mDistVals[0]; extractedSummary.push(`d=${st.d}m`); }
+          if (kmVals.length >= 1) { st.h_km = kmVals[0]; extractedSummary.push(`h=${st.h_km}km`); }
+        }
+
+        state.activePresetIndex = -1;
+        resetSimulation();
+        renderPresetsAndSliders();
+        updateAllViews();
+
+        const fb = document.getElementById('parsedValuesFeedback');
+        if (extractedSummary.length > 0) {
+          fb.innerHTML = `<span class="text-emerald-700 font-bold">✓ উদ্দীপক হতে শনাক্তকৃত মান:</span> <span class="font-mono font-semibold text-slate-900">${extractedSummary.join(' , ')}</span> — স্লাইডার, সমাধান ও অ্যানিমেশন আপডেট হয়েছে!`;
+        } else {
+          fb.innerHTML = `<span class="text-amber-700 font-bold">ℹ️ কাস্টম প্রশ্ন সেট হয়েছে।</span> নিচের স্লাইডার থেকে প্রয়োজনীয় মান অ্যাডজাস্ট করে নিন।`;
+        }
+
+        togglePlaySimulation();
+        showToast('সৃজনশীল প্রশ্ন অনুযায়ী সমাধান ও অ্যানিমেশন চালু হয়েছে!');
+      }
+
+      function updateExtraMassButtonUI() {
+        const btn = document.getElementById('dropExtraMassBtn');
+        const badge = document.getElementById('extraMassBadge');
+        const btnText = document.getElementById('dropMassBtnText');
+
+        if (state.activeTopic === 'friction') {
+          btn.classList.remove('hidden');
+          if (state.friction.hasExtraMass) {
+            btnText.textContent = `অতিরিক্ত ভর সরান (-${state.friction.extraMass} kg)`;
+            btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center gap-1.5 shadow-sm';
+            badge.classList.remove('hidden');
+            badge.textContent = `📦 অতিরিক্ত ভর যুক্ত (+${state.friction.extraMass} kg)`;
+          } else {
+            btnText.textContent = `হঠাৎ ভর যোগ করুন (+${state.friction.extraMass} kg)`;
+            btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 transition flex items-center gap-1.5 shadow-sm';
+            badge.classList.add('hidden');
+          }
+        } else {
+          btn.classList.add('hidden');
+          badge.classList.add('hidden');
+        }
+      }
+
+      // ---------- PHYSICS CALCULATIONS PER TOPIC ----------
+      function computePhysics() {
+        const g = 9.8;
+
+        if (state.activeTopic === 'friction') {
+          const { m, extraMass, hasExtraMass, u, F_app, mu, f_ext, t, d_obs, mode } = state.friction;
+          const m_eff = hasExtraMass ? (m + extraMass) : m;
+          const u_after_drop = (m * u) / (m + extraMass);
+          const u_eff = hasExtraMass ? u_after_drop : u;
+
+          const R_init = m * g;
+          const f_k_init = mu * R_init;
+          const f_total_init = f_k_init + f_ext;
+
+          const R = m_eff * g;
+          const f_k = mu * R;
+          const f_total = f_k + f_ext;
+
+          if (mode === 'brake') {
+            const F_total_ret = F_app + f_total;
+            const a_ret = F_total_ret / m_eff;
+            const t_stop = u_eff > 0 ? u_eff / a_ret : 0;
+            const s_stop = (u_eff * u_eff) / (2 * a_ret);
+            const t_eff = Math.min(t, t_stop);
+            const v_at_t = Math.max(0, u_eff - a_ret * t);
+            const s_at_t = u_eff * t_eff - 0.5 * a_ret * t_eff * t_eff;
+            const isSafe = s_stop <= d_obs;
+            const v_hit = s_stop > d_obs ? Math.sqrt(Math.max(0, u_eff * u_eff - 2 * a_ret * d_obs)) : 0;
+            return {
+              g, m_eff, u_after_drop, u_eff, R_init, f_k_init, f_total_init,
+              R, f_k, f_total, F_total_ret, a_ret, t_stop, s_stop, v_at_t, s_at_t, isSafe, v_hit
+            };
+          } else {
+            const F_net_init = u === 0 ? Math.max(0, F_app - f_total_init) : (F_app - f_total_init);
+            const a_init = F_net_init / m;
+
+            let v_init_at_t, s_init_at_t, t_stop_init = null;
+            if (a_init < 0 && u > 0) {
+              t_stop_init = -u / a_init;
+              const t_m = Math.min(t, t_stop_init);
+              v_init_at_t = Math.max(0, u + a_init * t);
+              s_init_at_t = u * t_m + 0.5 * a_init * t_m * t_m;
+            } else {
+              v_init_at_t = Math.max(0, u + a_init * t);
+              s_init_at_t = Math.max(0, u * t + 0.5 * a_init * t * t);
+            }
+
+            const R_extra = (m + extraMass) * g;
+            const f_k_extra = mu * R_extra;
+            const f_total_extra = f_k_extra + f_ext;
+            const F_net_with_extra = u_after_drop === 0 ? Math.max(0, F_app - f_total_extra) : (F_app - f_total_extra);
+            const a_with_extra = F_net_with_extra / (m + extraMass);
+
+            const F_net = u_eff === 0 ? Math.max(0, F_app - f_total) : (F_app - f_total);
+            const a = F_net / m_eff;
+
+            let v_at_t, s_at_t;
+            if (a < 0 && u_eff > 0) {
+              const t_stop_acc = -u_eff / a;
+              const t_move = Math.min(t, t_stop_acc);
+              v_at_t = Math.max(0, u_eff + a * t);
+              s_at_t = u_eff * t_move + 0.5 * a * t_move * t_move;
+            } else {
+              v_at_t = Math.max(0, u_eff + a * t);
+              s_at_t = Math.max(0, u_eff * t + 0.5 * a * t * t);
+            }
+
+            return {
+              g, m_eff, u_after_drop, u_eff, R_init, f_k_init, f_total_init,
+              R, f_k, f_total, F_net_init, a_init, v_init_at_t, s_init_at_t, t_stop_init,
+              R_extra, f_k_extra, f_total_extra, F_net_with_extra, a_with_extra,
+              F_net, a, v_at_t, s_at_t
+            };
+          }
+        }
+
+        if (state.activeTopic === 'collision') {
+          const { m1, u1, m2, u2, t_imp } = state.collision;
+          const p1_init = m1 * u1;
+          const p2_init = m2 * u2;
+          const P_total = p1_init + p2_init;
+          const M_total = m1 + m2;
+          const v_comb = P_total / M_total;
+          const KE1 = 0.5 * m1 * u1 * u1;
+          const KE2 = 0.5 * m2 * u2 * u2;
+          const KE_init = KE1 + KE2;
+          const KE_final = 0.5 * M_total * v_comb * v_comb;
+          const KE_loss = KE_init - KE_final;
+          const J1 = m1 * (v_comb - u1);
+          const F_imp = Math.abs(J1) / t_imp;
+          return { p1_init, p2_init, P_total, M_total, v_comb, KE1, KE2, KE_init, KE_final, KE_loss, J1, F_imp };
+        }
+
+        if (state.activeTopic === 'recoil') {
+          const { M, m_g, v, s_cm, u_ratio } = state.recoil;
+          const m = m_g / 1000;
+          const s = s_cm / 100;
+          const V_recoil = (m * v) / M;
+          const v1 = v * (1 - 1 / u_ratio);
+          const a_plank = (v * v - v1 * v1) / (2 * s);
+          const F_plank = m * a_plank;
+          const KE_bullet = 0.5 * m * v * v;
+          // Exact algebraic ratio to prevent floating point drift: extra_planks = (n - 1)^2 / (2n - 1)
+          const extra_planks = Math.pow(u_ratio - 1, 2) / (2 * u_ratio - 1);
+          const total_planks = extra_planks + 1;
+          const s_extra = extra_planks * s;
+          const s_total = total_planks * s;
+          return { m, s, V_recoil, v1, a_plank, F_plank, KE_bullet, s_extra, s_total, total_planks, extra_planks };
+        }
+
+        if (state.activeTopic === 'pulley') {
+          const { pMode, m1, m2, m3, mu, f_table, t } = state.pulley;
+          const dir = m1 >= m3 ? 1 : -1;
+          const F_drive_mag = Math.abs(m1 - m3) * g;
+
+          if (pMode === 'two_body') {
+            const M_total = m1 + m3;
+            const F_net = F_drive_mag;
+            const a_sys = F_net / M_total;
+            const T_equal = (2 * m1 * m3 * g) / M_total;
+            const s_disp = 0.5 * a_sys * t * t;
+            const v_final = a_sys * t;
+            return {
+              pMode, g, M_total, R2: 0, f_k2: 0, f_resist: 0,
+              F_drive_mag, dir, F_net, a_sys, T1: T_equal, T2: T_equal, s_disp, v_final
+            };
+          } else {
+            const M_total = m1 + m2 + m3;
+            const R2 = m2 * g;
+            const f_k2 = mu * R2;
+            const f_resist = f_k2 + f_table;
+            const F_net = Math.max(0, F_drive_mag - f_resist);
+            const a_sys = F_net / M_total;
+
+            let T1, T2;
+            if (F_net === 0) {
+              T1 = m1 * g;
+              T2 = m3 * g;
+            } else if (dir === 1) {
+              T1 = m1 * (g - a_sys);
+              T2 = m3 * (g + a_sys);
+            } else {
+              T1 = m1 * (g + a_sys);
+              T2 = m3 * (g - a_sys);
+            }
+
+            const s_disp = 0.5 * a_sys * t * t;
+            const v_final = a_sys * t;
+            return { pMode, g, M_total, R2, f_k2, f_resist, F_drive_mag, dir, F_net, a_sys, T1, T2, s_disp, v_final };
+          }
+        }
+
+        if (state.activeTopic === 'gravity') {
+          const { M1, M2, d, h_km, m_sat } = state.gravity;
+          const G_const = 6.673e-11;
+          const F_grav = (G_const * M1 * M2) / (d * d);
+          const ratioSqrt = Math.sqrt(M2 / M1);
+          const x_neutral = d / (1 + ratioSqrt);
+          const R_earth_km = 6400;
+          const g_surface = 9.8;
+          const g_height = g_surface * Math.pow(R_earth_km / (R_earth_km + h_km), 2);
+          const W_surface = m_sat * g_surface;
+          const W_height = m_sat * g_height;
+          return { G_const, F_grav, ratioSqrt, x_neutral, R_earth_km, g_surface, g_height, W_surface, W_height };
+        }
+      }
+
+      // ---------- UI RENDERERS ----------
+      function renderPresetsAndSliders() {
+        const cfg = topicConfigs[state.activeTopic];
+        document.getElementById('simTitle').textContent = cfg.title;
+        document.getElementById('simSubtitle').textContent = cfg.subtitle;
+        updateExtraMassButtonUI();
+
+        const presetContainer = document.getElementById('presetButtonsContainer');
+        presetContainer.innerHTML = '';
+        cfg.presets.forEach((preset, idx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `preset-chip px-3 py-1.5 rounded-lg text-xs border transition ${idx === state.activePresetIndex ? 'active' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'}`;
+          btn.textContent = preset.name;
+          btn.addEventListener('click', () => {
+            state.activePresetIndex = idx;
+            Object.assign(state[state.activeTopic], preset.values);
+            resetSimulation();
+            renderPresetsAndSliders();
+            updateAllViews();
+          });
+          presetContainer.appendChild(btn);
+        });
+
+        const slidersContainer = document.getElementById('slidersContainer');
+        slidersContainer.innerHTML = '';
+        const topicState = state[state.activeTopic];
+
+        cfg.sliders.forEach(item => {
+          if (state.activeTopic === 'pulley' && topicState.pMode === 'two_body' && ['m2', 'mu', 'f_table'].includes(item.key)) {
+            return;
+          }
+
+          const wrap = document.createElement('div');
+          wrap.className = 'bg-slate-50/80 p-2.5 rounded-xl border border-slate-200/80';
+
+          if (item.type === 'select') {
+            wrap.innerHTML = `
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">${item.label}</label>
+              <select data-key="${item.key}" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold bg-white text-slate-800 focus:outline-none focus:border-blue-600">
+                ${item.options.map(opt => `<option value="${opt.val}" ${topicState[item.key] === opt.val ? 'selected' : ''}>${opt.text}</option>`).join('')}
+              </select>
+            `;
+            const sel = wrap.querySelector('select');
+            sel.addEventListener('change', (e) => {
+              topicState[item.key] = e.target.value;
+              state.activePresetIndex = -1;
+              resetSimulation();
+              renderPresetsAndSliders();
+              updateAllViews();
+            });
+          } else {
+            const val = topicState[item.key];
+            wrap.innerHTML = `
+              <div class="flex items-center justify-between text-xs mb-1">
+                <label class="font-bold text-slate-700">${item.label}</label>
+                <div class="flex items-center gap-1">
+                  <input type="number" data-key="${item.key}" min="${item.min}" max="${item.max}" step="${item.step}" value="${val}" class="w-20 px-2 py-0.5 text-right font-mono font-bold text-blue-700 bg-white border border-slate-300 rounded text-xs">
+                  <span class="text-slate-500 font-medium">${item.unit}</span>
+                </div>
+              </div>
+              <input type="range" data-key="${item.key}" min="${item.min}" max="${item.max}" step="${item.step}" value="${val}" class="w-full h-1.5 bg-slate-200 rounded-lg">
+            `;
+            const rangeInput = wrap.querySelector('input[type="range"]');
+            const numInput = wrap.querySelector('input[type="number"]');
+
+            const handleInput = (newVal) => {
+              const parsed = parseFloat(newVal);
+              if (Number.isNaN(parsed)) return;
+              topicState[item.key] = parsed;
+              rangeInput.value = parsed;
+              numInput.value = parsed;
+              state.activePresetIndex = -1;
+              resetSimulation();
+              updateExtraMassButtonUI();
+              updateAllViews();
+            };
+
+            rangeInput.addEventListener('input', (e) => handleInput(e.target.value));
+            numInput.addEventListener('change', (e) => handleInput(e.target.value));
+          }
+
+          slidersContainer.appendChild(wrap);
+        });
+      }
+
+      // ---------- TELEMETRY CARDS & STEP-BY-STEP AUTO-SOLVED QUESTIONS ----------
+      function buildSolvedQuestionsData() {
+        const calc = computePhysics();
+
+        if (state.activeTopic === 'friction') {
+          const { m, extraMass, hasExtraMass, u, F_app, mu, f_ext, t, d_obs, mode } = state.friction;
+          if (mode === 'brake') {
+            const stem = `<strong>উদ্দীপক (ল্যাবের বর্তমান মান):</strong> <strong>${m} kg</strong> ভরের একটি গাড়ি ${hasExtraMass ? `<strong>${extraMass} kg</strong> অতিরিক্ত বোঝাসহ (মোট কার্যকর ভর <strong>${calc.m_eff} kg</strong>) ` : ''}<strong>${fmt(calc.u_eff)} ms⁻¹</strong> বেগে চলছিল। হঠাৎ গাড়িটি থেকে <strong>${d_obs} m</strong> সামনে একটি বাধা দেখতে পেয়ে চালক ব্রেক চাপলেন। ফলে <strong>${F_app} N</strong> ব্রেকিং বল কার্যকর হলো। রাস্তার গতীয় ঘর্ষণ সহগ <strong>μ = ${mu}</strong> এবং যান্ত্রিক বা বাতাসের সরাসরি বাধাদানকারী বল <strong>f<sub>ext</sub> = ${f_ext} N</strong>।`;
+            const telemetry = [
+              { label: 'মোট কার্যকর ভর (m)', val: `${calc.m_eff} kg`, color: 'text-indigo-600' },
+              { label: 'মোট ঘর্ষণ ও বাধা (f)', val: `${fmt(calc.f_total)} N`, color: 'text-amber-600' },
+              { label: 'কার্যকর মন্দন (a)', val: `${fmt(calc.a_ret)} ms⁻²`, color: 'text-rose-600' },
+              { label: 'থামার দূরত্ব (s)', val: `${fmt(calc.s_stop)} m`, color: calc.isSafe ? 'text-emerald-600' : 'text-rose-600' }
+            ];
+            const questions = [
+              {
+                id: 'fric_q1',
+                badge: 'গ নম্বর প্রশ্ন (৩ মার্কস — প্রয়োগমূলক)',
+                title: `প্রশ্ন ১ (গ): উদ্দীপকের গাড়িটির ওপর ক্রিয়াশীল মোট বাধাদানকারী বল, কার্যকর মন্দন এবং গাড়িটি থামতে কত সময় লাগবে তা নির্ণয় করো।`,
+                steps: [
+                  `<strong>১ম ধাপ (দেওয়া আছে):</strong><br>• গাড়ির কার্যকর ভর, m = ${calc.m_eff} kg<br>• গাড়ির আদিবেগ, u = ${fmt(calc.u_eff)} ms⁻¹ এবং শেষবেগ, v = 0 ms⁻¹<br>• প্রযুক্ত ব্রেকিং বল, F = ${F_app} N<br>• রাস্তার গতীয় ঘর্ষণ সহগ, μ = ${mu}<br>• অতিরিক্ত বাধাদানকারী বল, f<sub>ext</sub> = ${f_ext} N এবং অভিকর্ষজ ত্বরণ, g = 9.8 ms⁻²`,
+                  `<strong>২য় ধাপ (প্রয়োজনীয় সূত্র):</strong><br>• গতীয় ঘর্ষণ বল, f<sub>k</sub> = μR = μmg<br>• মোট বাধাদানকারী বল, F<sub>total</sub> = F + f<sub>k</sub> + f<sub>ext</sub><br>• নিউটনের ২য় সূত্রানুসারে মন্দন, a = <span class="fraction"><span class="num">F<sub>total</sub></span><span class="den">m</span></span> এবং থামার সময়, t = <span class="fraction"><span class="num">u</span><span class="den">a</span></span>`,
+                  `<strong>৩য় ধাপ (মান বসিয়ে ধাপে ধাপে হিসাব):</strong><br>• রাস্তার গতীয় ঘর্ষণ বল, f<sub>k</sub> = ${mu} × ${calc.m_eff} × 9.8 = <strong>${fmt(calc.f_k)} N</strong><br>• মোট বাধাদানকারী বল, F<sub>total</sub> = ${F_app} + ${fmt(calc.f_k)} + ${f_ext} = <strong>${fmt(calc.F_total_ret)} N</strong><br>• কার্যকর মন্দন, a = <span class="fraction"><span class="num">${fmt(calc.F_total_ret)}</span><span class="den">${calc.m_eff}</span></span> = <strong>${fmt(calc.a_ret)} ms⁻²</strong><br>• গাড়িটি থামতে প্রয়োজনীয় সময়, t = <span class="fraction"><span class="num">${fmt(calc.u_eff)}</span><span class="den">${fmt(calc.a_ret)}</span></span> = <strong>${fmt(calc.t_stop)} s</strong>`,
+                  `<strong>চূড়ান্ত উত্তর:</strong> গাড়িটির ওপর ক্রিয়াশীল মোট বাধাদানকারী বল <strong>${fmt(calc.F_total_ret)} N</strong>, কার্যকর মন্দন <strong>${fmt(calc.a_ret)} ms⁻²</strong> এবং গাড়িটি থামতে <strong>${fmt(calc.t_stop)} সেকেন্ড</strong> সময় লাগবে।`
+                ]
+              },
+              {
+                id: 'fric_q2',
+                badge: 'ঘ নম্বর প্রশ্ন (৪ মার্কস — উচ্চতর দক্ষতা)',
+                title: `প্রশ্ন ২ (ঘ): গাড়িটি সামনের ${d_obs} m দূরের বাধাটিকে আঘাত না করে নিরাপদে থামতে পারবে কি না? গাণিতিক যুক্তিসহ বিশ্লেষণ করো।`,
+                steps: [
+                  `<strong>১ম ধাপ (দেওয়া আছে):</strong><br>• গাড়ির আদিবেগ, u = ${fmt(calc.u_eff)} ms⁻¹<br>• থেমে যাওয়ার পর শেষবেগ, v = 0 ms⁻¹<br>• গ হতে প্রাপ্ত কার্যকর মন্দন, a = ${fmt(calc.a_ret)} ms⁻²<br>• গাড়ি হতে বাধার দূরত্ব, d = ${d_obs} m`,
+                  `<strong>২য় ধাপ (প্রয়োজনীয় সূত্র):</strong><br>আমরা জানি, গতির সমীকরণ অনুসারে,<br>v² = u² - 2as &nbsp;⇒&nbsp; 0 = u² - 2as &nbsp;⇒&nbsp; s = <span class="fraction"><span class="num">u²</span><span class="den">2a</span></span>`,
+                  `<strong>৩য় ধাপ (মান বসিয়ে হিসাব):</strong><br>গাড়িটি সম্পূর্ণ থামতে অতিক্রান্ত দূরত্ব,<br>s = <span class="fraction"><span class="num">(${fmt(calc.u_eff)})²</span><span class="den">2 × ${fmt(calc.a_ret)}</span></span> = <span class="fraction"><span class="num">${fmt(calc.u_eff * calc.u_eff)}</span><span class="den">${fmt(2 * calc.a_ret)}</span></span> = <strong>${fmt(calc.s_stop)} m</strong>`,
+                  `<strong>চূড়ান্ত সিদ্ধান্ত ও বিশ্লেষণ:</strong><br>গাণিতিক হিসাবে দেখা যাচ্ছে, ব্রেক চাপার পর গাড়িটি থামতে <strong>s = ${fmt(calc.s_stop)} m</strong> দূরত্ব অতিক্রম করবে, যেখানে বাধাটি রয়েছে <strong>d = ${d_obs} m</strong> দূরে।<br>${calc.s_stop < d_obs ? `যেহেতু <strong>s < d</strong> (${fmt(calc.s_stop)} m < ${d_obs} m), তাই গাড়িটি বাধাটির <strong>(${d_obs} - ${fmt(calc.s_stop)}) = ${fmt(d_obs - calc.s_stop)} m আগেই নিরাপদে থেমে যাবে</strong> এবং কোনো সংঘর্ষ ঘটবে না।` : (Math.abs(calc.s_stop - d_obs) < 0.01 ? `যেহেতু <strong>s = d</strong>, তাই গাড়িটি ঠিক বাধার সামনে গিয়ে স্পর্শ করার মুহূর্তে থেমে যাবে।` : `যেহেতু <strong>s > d</strong> (${fmt(calc.s_stop)} m > ${d_obs} m), তাই গাড়িটি বাধার আগে <strong>থামতে পারবে না</strong>; বরং বাধাটিকে <strong>v = √(u² - 2ad) = ${fmt(calc.v_hit)} ms⁻¹</strong> বেগে আঘাত করবে।`)}`
+                ]
+              }
+            ];
+            return applyCustomCqOverrides({ stem, telemetry, questions });
+          } else {
+            const stem = `<strong>উদ্দীপক (ল্যাবের বর্তমান মান):</strong> <strong>${m} kg</strong> ভরের একটি গাড়ি <strong>${u} ms⁻¹</strong> বেগে চলমান। গাড়িটির ওপর গতির দিকে <strong>${F_app} N</strong> সম্মুখ বল প্রয়োগ করা হচ্ছে। রাস্তার গতীয় ঘর্ষণ সহগ <strong>μ = ${mu}</strong> এবং যান্ত্রিক বাধাদানকারী বল <strong>f<sub>ext</sub> = ${f_ext} N</strong>। পরবর্তীতে <strong>${t} s</strong> ধরে গতি পর্যবেক্ষণ করা হলো এবং চলন্ত অবস্থায় গাড়িটির ওপর হঠাৎ <strong>Δm = ${extraMass} kg</strong> ভরের আরেকটি বস্তু চাপিয়ে দেওয়া হলো।`;
+            const telemetry = [
+              { label: 'মোট বাধা (f_k + f_ext)', val: `${fmt(calc.f_total)} N`, color: 'text-amber-600' },
+              { label: 'কার্যকর বল (F_net)', val: `${fmt(calc.F_net)} N`, color: 'text-blue-600' },
+              { label: 'বর্তমান ত্বরণ (a)', val: `${fmt(calc.a)} ms⁻²`, color: 'text-emerald-600' },
+              { label: 'ভর যোগের পর বেগ (u\')', val: `${fmt(calc.u_after_drop)} ms⁻¹`, color: 'text-indigo-600' }
+            ];
+            const questions = [
+              {
+                id: 'fric_acc_q1',
+                badge: 'গ নম্বর প্রশ্ন (৩ মার্কস — প্রয়োগমূলক)',
+                title: `প্রশ্ন ১ (গ): অতিরিক্ত ভর যোগ করার পূর্বে গাড়িটির ওপর ক্রিয়াশীল মোট বাধাদানকারী বল, প্রাথমিক ত্বরণ এবং ${t} সেকেন্ডে অতিক্রান্ত দূরত্ব নির্ণয় করো।`,
+                steps: [
+                  `<strong>১ম ধাপ (দেওয়া আছে):</strong><br>• গাড়ির আদি ভর, m = ${m} kg এবং আদিবেগ, u = ${u} ms⁻¹<br>• প্রযুক্ত সম্মুখ বল, F = ${F_app} N<br>• গতীয় ঘর্ষণ সহগ, μ = ${mu} এবং অতিরিক্ত বাধা, f<sub>ext</sub> = ${f_ext} N<br>• সময়, t = ${t} s এবং অভিকর্ষজ ত্বরণ, g = 9.8 ms⁻²`,
+                  `<strong>২য় ধাপ (প্রয়োজনীয় সূত্র):</strong><br>• গতীয় ঘর্ষণ বল, f<sub>k</sub> = μmg এবং মোট বাধা, f<sub>total</sub> = f<sub>k</sub> + f<sub>ext</sub><br>• নিট কার্যকর বল, F<sub>net</sub> = F - f<sub>total</sub><br>• প্রাথমিক ত্বরণ, a₁ = <span class="fraction"><span class="num">F<sub>net</sub></span><span class="den">m</span></span> এবং অতিক্রান্ত দূরত্ব, s = ut + ½a₁t²`,
+                  `<strong>৩য় ধাপ (মান বসিয়ে ধাপে ধাপে হিসাব):</strong><br>• গতীয় ঘর্ষণ বল, f<sub>k</sub> = ${mu} × ${m} × 9.8 = <strong>${fmt(calc.f_k_init)} N</strong><br>• মোট বাধাদানকারী বল, f<sub>total</sub> = ${fmt(calc.f_k_init)} + ${f_ext} = <strong>${fmt(calc.f_total_init)} N</strong><br>• নিট কার্যকর বল, F<sub>net</sub> = ${F_app} - ${fmt(calc.f_total_init)} = <strong>${fmt(calc.F_net_init)} N</strong><br>• প্রাথমিক ত্বরণ, a₁ = <span class="fraction"><span class="num">${fmt(calc.F_net_init)}</span><span class="den">${m}</span></span> = <strong>${fmt(calc.a_init)} ms⁻²</strong><br>• ${t} সেকেন্ডে অতিক্রান্ত দূরত্ব, s = (${u} × ${t}) + 0.5 × (${fmt(calc.a_init)}) × (${t})² = <strong>${fmt(calc.s_init_at_t)} m</strong>`,
+                  `<strong>চূড়ান্ত উত্তর:</strong> প্রাথমিক অবস্থায় মোট বাধাদানকারী বল <strong>${fmt(calc.f_total_init)} N</strong>, ত্বরণ <strong>${fmt(calc.a_init)} ms⁻²</strong> এবং ${t} সেকেন্ডে অতিক্রান্ত দূরত্ব <strong>${fmt(calc.s_init_at_t)} m</strong>।`
+                ]
+              },
+              {
+                id: 'fric_acc_q2',
+                badge: 'ঘ নম্বর প্রশ্ন (৪ মার্কস — উচ্চতর দক্ষতা)',
+                title: `প্রশ্ন ২ (ঘ): চলন্ত গাড়িটির ওপর হঠাৎ Δm = ${extraMass} kg ভরের বস্তুটি চাপিয়ে দিলে তাৎক্ষণিক বেগ ও ত্বরণের কীরূপ পরিবর্তন ঘটবে? গাণিতিকভাবে বিশ্লেষণ করো।`,
+                steps: [
+                  `<strong>১ম ধাপ (ভরবেগের সংরক্ষণ সূত্রানুসারে তাৎক্ষণিক বেগের পরিবর্তন):</strong><br>চলন্ত গাড়ির ওপর উল্লম্বভাবে Δm = ${extraMass} kg ভর চাপানো হলে অনুভূমিক দিকে ভরবেগ সংরক্ষিত থাকে।<br>সূত্র: m·u = (m + Δm)·u' &nbsp;⇒&nbsp; u' = <span class="fraction"><span class="num">m × u</span><span class="den">m + Δm</span></span> = <span class="fraction"><span class="num">${m} × ${u}</span><span class="den">${m} + ${extraMass}</span></span> = <strong>${fmt(calc.u_after_drop)} ms⁻¹</strong><br>সুতরাং তাৎক্ষণিক বেগ ${u} ms⁻¹ হতে কমে <strong>${fmt(calc.u_after_drop)} ms⁻¹</strong> হবে (বেগ হ্রাস = ${fmt(u - calc.u_after_drop)} ms⁻¹)।`,
+                  `<strong>২য় ধাপ (নতুন মোট ভর ও নতুন বাধাদানকারী বল নির্ণয়):</strong><br>• নতুন মোট ভর, M' = m + Δm = ${m} + ${extraMass} = <strong>${m + extraMass} kg</strong><br>• নতুন গতীয় ঘর্ষণ বল, f'<sub>k</sub> = μM'g = ${mu} × ${m + extraMass} × 9.8 = <strong>${fmt(calc.f_k_extra)} N</strong><br>• নতুন মোট বাধাদানকারী বল, f'<sub>total</sub> = f'<sub>k</sub> + f<sub>ext</sub> = ${fmt(calc.f_k_extra)} + ${f_ext} = <strong>${fmt(calc.f_total_extra)} N</strong>`,
+                  `<strong>৩য় ধাপ (নতুন কার্যকর বল ও নতুন ত্বরণ নির্ণয়):</strong><br>• নতুন নিট কার্যকর বল, F'<sub>net</sub> = F - f'<sub>total</sub> = <strong>${fmt(calc.F_net_with_extra)} N</strong><br>• নতুন ত্বরণ, a₂ = <span class="fraction"><span class="num">F'<sub>net</sub></span><span class="den">M'</span></span> = <span class="fraction"><span class="num">${fmt(calc.F_net_with_extra)}</span><span class="den">${m + extraMass}</span></span> = <strong>${fmt(calc.a_with_extra)} ms⁻²</strong>`,
+                  `<strong>চূড়ান্ত সিদ্ধান্ত:</strong> চলন্ত গাড়িতে ${extraMass} kg অতিরিক্ত ভর চাপিয়ে দেওয়ায় তাৎক্ষণিক বেগ <strong>${u} ms⁻¹ থেকে কমে ${fmt(calc.u_after_drop)} ms⁻¹</strong> হবে এবং ত্বরণ <strong>a₁ = ${fmt(calc.a_init)} ms⁻² থেকে পরিবর্তিত হয়ে a₂ = ${fmt(calc.a_with_extra)} ms⁻²</strong> হবে (ত্বরণের পরিবর্তন = <strong>${fmt(Math.abs(calc.a_init - calc.a_with_extra))} ms⁻²</strong>)।`
+                ]
+              }
+            ];
+            return applyCustomCqOverrides({ stem, telemetry, questions });
+          }
+        }
+
+        if (state.activeTopic === 'collision') {
+          const { m1, u1, m2, u2, t_imp } = state.collision;
+          const dirText = u2 < 0 ? `বিপরীত দিক থেকে <strong>${Math.abs(u2)} ms⁻¹</strong> বেগে` : (u2 === 0 ? `স্থির অবস্থায় (<strong>0 ms⁻¹</strong>)` : `একই দিকে <strong>${u2} ms⁻¹</strong> বেগে`);
+          const stem = `<strong>উদ্দীপক (ল্যাবের বর্তমান মান):</strong> <strong>${m1} kg</strong> ভরের একটি গাড়ি <strong>${u1} ms⁻¹</strong> বেগে চলার সময় ${dirText} থাকা <strong>${m2} kg</strong> ভরের অপর একটি গাড়ির সাথে ধাক্কা খেয়ে মিলিত অবস্থায় চলতে শুরু করল। সংঘর্ষকাল ছিল <strong>${t_imp} s</strong>।`;
+          const telemetry = [
+            { label: 'মোট আদি ভরবেগ (P)', val: `${fmt(calc.P_total)} kg·ms⁻¹`, color: 'text-blue-600' },
+            { label: 'মিলিত বেগ (v)', val: `${fmt(calc.v_comb)} ms⁻¹`, color: 'text-emerald-600' },
+            { label: 'গতিশক্তি হ্রাস (ΔE)', val: `${fmt(calc.KE_loss)} J`, color: 'text-rose-600' },
+            { label: 'সংঘর্ষ বল (F_imp)', val: `${fmt(calc.F_imp)} N`, color: 'text-amber-600' }
+          ];
+          const questions = [
+            {
+              id: 'col_q1',
+              badge: 'গ নম্বর প্রশ্ন (৩ মার্কস — প্রয়োগমূলক)',
+              title: `প্রশ্ন ১ (গ): সংঘর্ষের পর মিলিত গাড়ি দুটির বেগ কত হবে, তারা কোন দিকে যাবে এবং সংঘর্ষকালীন ঘাত বল কত তা নির্ণয় করো।`,
+              steps: [
+                `<strong>১ম ধাপ (দেওয়া আছে):</strong><br>• ১ম গাড়ির ভর, m₁ = ${m1} kg এবং আদিবেগ, u₁ = ${u1} ms⁻¹ (ধনাত্মক দিকে)<br>• ২য় গাড়ির ভর, m₂ = ${m2} kg এবং আদিবেগ, u₂ = ${u2} ms⁻¹ ${u2 < 0 ? '(বিপরীত দিক হওয়ায় ঋণাত্মক)' : ''}<br>• সংঘর্ষকাল, t = ${t_imp} s`,
+                `<strong>২য় ধাপ (প্রয়োজনীয় সূত্র):</strong><br>ভরবেগের সংরক্ষণ সূত্রানুসারে,<br>m₁u₁ + m₂u₂ = (m₁ + m₂)v &nbsp;⇒&nbsp; v = <span class="fraction"><span class="num">m₁u₁ + m₂u₂</span><span class="den">m₁ + m₂</span></span><br>এবং ১ম গাড়ির ওপর ক্রিয়াশীল ঘাত বলের মান, F = <span class="fraction"><span class="num">|m₁(v - u₁)|</span><span class="den">t</span></span>`,
+                `<strong>৩য় ধাপ (মান বসিয়ে ধাপে ধাপে হিসাব):</strong><br>• সংঘর্ষের পূর্বে মোট ভরবেগ, P = (${m1} × ${u1}) + (${m2} × ${u2}) = ${fmt(calc.p1_init)} + (${fmt(calc.p2_init)}) = <strong>${fmt(calc.P_total)} kg·ms⁻¹</strong><br>• মিলিত ভর, M = m₁ + m₂ = ${m1} + ${m2} = <strong>${calc.M_total} kg</strong><br>• মিলিত বেগ, v = <span class="fraction"><span class="num">${fmt(calc.P_total)}</span><span class="den">${calc.M_total}</span></span> = <strong>${fmt(calc.v_comb)} ms⁻¹</strong><br>• সংঘর্ষকালীন ঘাত বল, F = <span class="fraction"><span class="num">|${m1} × (${fmt(calc.v_comb)} - ${u1})|</span><span class="den">${t_imp}</span></span> = <strong>${fmt(calc.F_imp)} N</strong>`,
+                `<strong>চূড়ান্ত উত্তর ও দিক:</strong> মিলিত গাড়ি দুটির বেগের মান <strong>${fmt(Math.abs(calc.v_comb))} ms⁻¹</strong> এবং ঘাত বল <strong>${fmt(calc.F_imp)} N</strong>। ${calc.v_comb > 0 ? 'যেহেতু v এর মান ধনাত্মক (+), তাই মিলিত গাড়িটি <strong>১ম গাড়ির আদি গতির দিকে</strong> চলবে।' : (calc.v_comb < 0 ? 'যেহেতু v এর মান ঋণাত্মক (-), তাই মিলিত গাড়িটি <strong>২য় গাড়ির আদি গতির দিকে</strong> চলবে।' : 'যেহেতু মিলিত বেগ শূন্য (0 ms⁻¹), তাই সংঘর্ষের পর উভয় গাড়িই স্থির হয়ে থেমে যাবে।')}`
+              ]
+            },
+            {
+              id: 'col_q2',
+              badge: 'ঘ নম্বর প্রশ্ন (৪ মার্কস — উচ্চতর দক্ষতা)',
+              title: `প্রশ্ন ২ (ঘ): উদ্দীপকের সংঘর্ষটি স্থিতিস্থাপক নাকি অস্থিতিস্থাপক? সংঘর্ষের পূর্বে ও পরে মোট গতিশক্তির গাণিতিক বিশ্লেষণের মাধ্যমে মতামত দাও।`,
+              steps: [
+                `<strong>১ম ধাপ (সংঘর্ষের পূর্বে মোট গতিশক্তি নির্ণয়):</strong><br>• ১ম গাড়ির আদি গতিশক্তি, E<sub>k1</sub> = ½m₁u₁² = 0.5 × ${m1} × (${u1})² = <strong>${fmt(calc.KE1)} J</strong><br>• ২য় গাড়ির আদি গতিশক্তি, E<sub>k2</sub> = ½m₂u₂² = 0.5 × ${m2} × (${u2})² = <strong>${fmt(calc.KE2)} J</strong><br>• সুতরাং সংঘর্ষের পূর্বে মোট গতিশক্তি, E<sub>i</sub> = E<sub>k1</sub> + E<sub>k2</sub> = ${fmt(calc.KE1)} + ${fmt(calc.KE2)} = <strong>${fmt(calc.KE_init)} J</strong>`,
+                `<strong>২য় ধাপ (সংঘর্ষের পরে মিলিত গাড়ির মোট গতিশক্তি নির্ণয়):</strong><br>গ হতে প্রাপ্ত মিলিত বেগ, v = ${fmt(calc.v_comb)} ms⁻¹<br>• সংঘর্ষের পরে মোট গতিশক্তি, E<sub>f</sub> = ½(m₁ + m₂)v² = 0.5 × ${calc.M_total} × (${fmt(calc.v_comb)})² = <strong>${fmt(calc.KE_final)} J</strong>`,
+                `<strong>৩য় ধাপ (গতিশক্তির পরিবর্তন বিশ্লেষণ):</strong><br>এখানে, E<sub>i</sub> = ${fmt(calc.KE_init)} J এবং E<sub>f</sub> = ${fmt(calc.KE_final)} J।<br>সুতরাং গতিশক্তি হ্রাস বা অপচয়, ΔE = E<sub>i</sub> - E<sub>f</sub> = ${fmt(calc.KE_init)} - ${fmt(calc.KE_final)} = <strong>${fmt(calc.KE_loss)} J</strong> (যা সংঘর্ষের সময় শব্দ, তাপ ও যান্ত্রিক বিকৃতিতে রূপান্তরিত হয়েছে)।`,
+                `<strong>চূড়ান্ত সিদ্ধান্ত:</strong> যেহেতু সংঘর্ষের পর বস্তু দুটি মিলিত হয়ে একত্রে চলছে এবং সংঘর্ষের পূর্বে ও পরে মোট গতিশক্তি সমান নয় (<strong>E<sub>i</sub> ≠ E<sub>f</sub></strong>, গতিশক্তি সংরক্ষিত হয়নি), তাই উদ্দীপকের সংঘর্ষটি একটি <strong>অস্থিতিস্থাপক সংঘর্ষ (Inelastic Collision)</strong>।`
+              ]
+            }
+          ];
+          return applyCustomCqOverrides({ stem, telemetry, questions });
+        }
+
+        if (state.activeTopic === 'recoil') {
+          const { M, m_g, v, s_cm, u_ratio } = state.recoil;
+          const stem = `<strong>উদ্দীপক (ল্যাবের বর্তমান মান):</strong> <strong>${M} kg</strong> ভরের একটি বন্দুক থেকে <strong>${m_g} g</strong> ভরের একটি গুলি <strong>${v} ms⁻¹</strong> বেগে ছোড়া হলো। গুলিটি সামনে রাখা <strong>${s_cm} cm</strong> পুরুত্বের একটি কাঠের তক্তা ভেদ করায় এর বেগ <strong>১/${u_ratio} অংশ</strong> হ্রাস পেল।`;
+          const telemetry = [
+            { label: 'বন্দুকের পশ্চাৎ বেগ (V)', val: `${fmt(calc.V_recoil, 3)} ms⁻¹`, color: 'text-blue-600' },
+            { label: '১টি তক্তার পর বেগ (v₁)', val: `${fmt(calc.v1)} ms⁻¹`, color: 'text-amber-600' },
+            { label: 'বাধাদানকারী বল (F)', val: `${fmt(calc.F_plank)} N`, color: 'text-rose-600' },
+            { label: 'আরও তক্তা ভেদ করবে', val: `${fmt(calc.extra_planks)} টি`, color: 'text-emerald-600' }
+          ];
+          const fullExtraCount = Math.floor(calc.extra_planks + 1e-9);
+          const partialFrac = calc.extra_planks - fullExtraCount;
+          const questions = [
+            {
+              id: 'rec_q1',
+              badge: 'গ নম্বর প্রশ্ন (৩ মার্কস — প্রয়োগমূলক)',
+              title: `প্রশ্ন ১ (গ): উদ্দীপকের বন্দুকটির পশ্চাৎ বেগ এবং তক্তা কর্তৃক গুলির ওপর প্রযুক্ত বাধাদানকারী বলের মান নির্ণয় করো।`,
+              steps: [
+                `<strong>১ম ধাপ (দেওয়া আছে ও একক রূপান্তর):</strong><br>• বন্দুকের ভর, M = ${M} kg এবং বন্দুকের আদিবেগ, U = 0 ms⁻¹<br>• গুলির ভর, m = ${m_g} g = <span class="fraction"><span class="num">${m_g}</span><span class="den">1000</span></span> kg = <strong>${calc.m} kg</strong><br>• গুলির আদিবেগ, v = ${v} ms⁻¹<br>• ১টি তক্তার পুরুত্ব, s = ${s_cm} cm = <span class="fraction"><span class="num">${s_cm}</span><span class="den">100</span></span> m = <strong>${calc.s} m</strong>`,
+                `<strong>২য় ধাপ (বন্দুকের পশ্চাৎ বেগ V নির্ণয়):</strong><br>ভরবেগের সংরক্ষণ সূত্রানুসারে, MV + mv = 0<br>বা, V = - <span class="fraction"><span class="num">m × v</span><span class="den">M</span></span> = - <span class="fraction"><span class="num">${calc.m} × ${v}</span><span class="den">${M}</span></span> = <strong>-${fmt(calc.V_recoil, 3)} ms⁻¹</strong><br>(ঋণাত্মক চিহ্ন বোঝায় বন্দুকটি গুলির বিপরীত দিকে পেছাবে; সুতরাং পশ্চাৎ বেগের মান <strong>${fmt(calc.V_recoil, 3)} ms⁻¹</strong>)।`,
+                `<strong>৩য় ধাপ (তক্তার ভেতর গুলির মন্দন ও বাধাদানকারী বল নির্ণয়):</strong><br>• ১টি তক্তা ভেদ করার পর বেগ ১/${u_ratio} অংশ হ্রাস পাওয়ায় অবশিষ্ট বেগ,<br>v₁ = v - <span class="fraction"><span class="num">v</span><span class="den">${u_ratio}</span></span> = ${v} × (1 - <span class="fraction"><span class="num">1</span><span class="den">${u_ratio}</span></span>) = <strong>${fmt(calc.v1)} ms⁻¹</strong><br>• আমরা জানি, v₁² = v² - 2as &nbsp;⇒&nbsp; মন্দন, a = <span class="fraction"><span class="num">v² - v₁²</span><span class="den">2s</span></span> = <span class="fraction"><span class="num">(${v})² - (${fmt(calc.v1)})²</span><span class="den">2 × ${calc.s}</span></span> = <strong>${fmt(calc.a_plank)} ms⁻²</strong><br>• সুতরাং তক্তার বাধাদানকারী বল, F = ma = ${calc.m} × ${fmt(calc.a_plank)} = <strong>${fmt(calc.F_plank)} N</strong>`,
+                `<strong>চূড়ান্ত উত্তর:</strong> বন্দুকটির পশ্চাৎ বেগ <strong>${fmt(calc.V_recoil, 3)} ms⁻¹</strong> এবং তক্তা কর্তৃক বাধাদানকারী বলের মান <strong>${fmt(calc.F_plank)} N</strong>।`
+              ]
+            },
+            {
+              id: 'rec_q2',
+              badge: 'ঘ নম্বর প্রশ্ন (৪ মার্কস — উচ্চতর দক্ষতা)',
+              title: `প্রশ্ন ২ (ঘ): ১ম তক্তাটি ভেদ করার পর গুলিটি অনুরূপ আরও কয়টি তক্তা ভেদ করতে পারবে? গাণিতিক বিশ্লেষণ করো।`,
+              steps: [
+                `<strong>১ম ধাপ (দেওয়া আছে):</strong><br>• ১ম তক্তাটি ভেদ করার পর গুলির অবশিষ্ট বেগ (নতুন আদিবেগ), u' = v₁ = <strong>${fmt(calc.v1)} ms⁻¹</strong><br>• গুলিটি সম্পূর্ণ থেমে গেলে শেষবেগ, v' = 0 ms⁻¹<br>• গ হতে প্রাপ্ত তক্তার ভেতরে গুলির মন্দন, a = <strong>${fmt(calc.a_plank)} ms⁻²</strong><br>• প্রতিটি তক্তার পুরুত্ব, s = ${s_cm} cm = <strong>${calc.s} m</strong>`,
+                `<strong>২য় ধাপ (আরও কত দূরত্ব গিয়ে থামবে তা নির্ণয়):</strong><br>ধরি, ১ম তক্তাটি ভেদ করার পর গুলিটি আরও s' দূরত্ব অতিক্রম করে সম্পূর্ণ থেমে যাবে।<br>আমরা জানি, v'² = u'² - 2as' &nbsp;⇒&nbsp; 0 = v₁² - 2as'<br>বা, s' = <span class="fraction"><span class="num">v₁²</span><span class="den">2a</span></span> = <span class="fraction"><span class="num">(${fmt(calc.v1)})²</span><span class="den">2 × ${fmt(calc.a_plank)}</span></span> = <strong>${fmt(calc.s_extra, 4)} m</strong> = <strong>${fmt(calc.s_extra * 100)} cm</strong>`,
+                `<strong>৩য় ধাপ (অতিরিক্ত তক্তার সংখ্যা নির্ণয়):</strong><br>ভেদকৃত অতিরিক্ত তক্তার সংখ্যা, n = <span class="fraction"><span class="num">অতিরিক্ত দূরত্ব (s')</span><span class="den">১টি তক্তার পুরুত্ব (s)</span></span> = <span class="fraction"><span class="num">${fmt(calc.s_extra * 100)} cm</span><span class="den">${s_cm} cm</span></span> = <strong>${fmt(calc.extra_planks)} টি</strong>`,
+                `<strong>চূড়ান্ত সিদ্ধান্ত:</strong> ${fullExtraCount >= 1 ? `১ম তক্তাটি ভেদ করার পর গুলিটি অনুরূপ আরও <strong>${fullExtraCount} টি তক্তা সম্পূর্ণভাবে</strong> ভেদ করতে পারবে${partialFrac > 0.01 ? ` এবং পরবর্তী তক্তাটির ভেতরে <strong>${fmt(partialFrac * s_cm)} cm (${fmt(partialFrac * 100)}%)</strong> প্রবেশ করে থেমে যাবে।` : ' এবং ঠিক সেখানেই থেমে যাবে।'}` : `যেহেতু অতিরিক্ত তক্তার সংখ্যা n = <strong>${fmt(calc.extra_planks)} < 1</strong>, তাই ১ম তক্তাটি ভেদ করার পর গুলিটি <strong>আর কোনো তক্তা সম্পূর্ণভাবে ভেদ করতে পারবে না</strong>; বরং ২য় তক্তাটির ভেতরে <strong>${fmt(calc.s_extra * 100)} cm (অর্থাৎ ${fmt(calc.extra_planks * 100)}% পুরুত্ব)</strong> প্রবেশ করে থেমে যাবে।`}`
+              ]
+            }
+          ];
+          return applyCustomCqOverrides({ stem, telemetry, questions });
+        }
+
+        if (state.activeTopic === 'pulley') {
+          const { pMode, m1, m2, m3, mu, f_table, t } = state.pulley;
+          if (pMode === 'two_body') {
+            const stem = `<strong>উদ্দীপক (NCTB ৯ম-১০ম শ্রেণির পাঠ্যবই মডেল — ২-বস্তুর কপিকল):</strong> একটি ঘর্ষণহীন হালকা কপিকলের দুই প্রান্তে একটি ভরহীন সুতার সাহায্যে ডানপাশে <strong>m₁ = ${m1} kg</strong> এবং বামপাশে <strong>m₃ = ${m3} kg</strong> ভরের দুটি বস্তু ঝুলানো আছে। এখানে পুরো সুতায় টান <strong>সর্বত্র সমান (T₁ = T₂ = T)</strong>। পরবর্তীতে স্থির অবস্থান হতে <strong>${t} s</strong> ধরে এদের গতি পর্যবেক্ষণ করা হলো।`;
+            const telemetry = [
+              { label: 'ব্যবস্থার ত্বরণ (a)', val: `${fmt(calc.a_sys)} ms⁻²`, color: 'text-blue-600' },
+              { label: 'ডান সুতার টান (T₁)', val: `${fmt(calc.T1)} N`, color: 'text-emerald-600' },
+              { label: 'বাম সুতার টান (T₂)', val: `${fmt(calc.T2)} N`, color: 'text-emerald-600' },
+              { label: `${t}s এ সরণ (s)`, val: `${fmt(calc.s_disp)} m`, color: 'text-indigo-600' }
+            ];
+            const questions = [
+              {
+                id: 'pul_q1',
+                badge: 'গ নম্বর প্রশ্ন (৩ মার্কস — মেইন বই)',
+                title: `প্রশ্ন ১ (গ): উদ্দীপকের কপিকল ব্যবস্থার সাধারণ ত্বরণ (a) এবং সুতার টান (T) নির্ণয় করো।`,
+                steps: [
+                  `<strong>১ম ধাপ (দেওয়া আছে):</strong><br>• ডানপাশের ঝুলন্ত বস্তুর ভর, m₁ = ${m1} kg<br>• বামপাশের ঝুলন্ত বস্তুর ভর, m₃ = ${m3} kg<br>• অভিকর্ষজ ত্বরণ, g = 9.8 ms⁻²`,
+                  `<strong>২য় ধাপ (প্রয়োজনীয় সূত্র):</strong><br>• কপিকল ব্যবস্থার সাধারণ ত্বরণ, a = <span class="fraction"><span class="num">|m₁ - m₃| × g</span><span class="den">m₁ + m₃</span></span><br>• ভরহীন অভিন্ন সুতায় ক্রিয়াশীল টান, T = <span class="fraction"><span class="num">2m₁m₃g</span><span class="den">m₁ + m₃</span></span>`,
+                  `<strong>৩য় ধাপ (মান বসিয়ে ধাপে ধাপে হিসাব):</strong><br>• সাধারণ ত্বরণ, a = <span class="fraction"><span class="num">|${m1} - ${m3}| × 9.8</span><span class="den">${m1} + ${m3}</span></span> = <span class="fraction"><span class="num">${fmt(calc.F_drive_mag)}</span><span class="den">${calc.M_total}</span></span> = <strong>${fmt(calc.a_sys)} ms⁻²</strong><br>• সুতার অভিন্ন টান, T = <span class="fraction"><span class="num">2 × ${m1} × ${m3} × 9.8</span><span class="den">${m1} + ${m3}</span></span> = <strong>${fmt(calc.T1)} N</strong>`,
+                  `<strong>চূড়ান্ত উত্তর:</strong> কপিকল ব্যবস্থার সাধারণ ত্বরণ <strong>${fmt(calc.a_sys)} ms⁻²</strong> এবং সুতার টান <strong>${fmt(calc.T1)} N</strong>।`
+                ]
+              },
+              {
+                id: 'pul_q2',
+                badge: 'ঘ নম্বর প্রশ্ন (৪ মার্কস — উচ্চতর দক্ষতা)',
+                title: `প্রশ্ন ২ (ঘ): উভয় পাশের সুতার টান কেন সমান হলো এবং স্থির অবস্থান হতে ${t} সেকেন্ডে বস্তু দুটি কত দূরত্ব অতিক্রম করবে? বিশ্লেষণ করো।`,
+                steps: [
+                  `<strong>১ম ধাপ (উভয় পাশের সুতার টান সমান হওয়ার গাণিতিক প্রমাণ):</strong><br>যেহেতু একটিই ভরহীন ও অপ্রসারণশীল সুতা ঘর্ষণহীন কপিকলের ওপর দিয়ে গেছে এবং মাঝখানে অন্য কোনো বস্তু নেই, তাই:<br>• ডানপাশের বস্তুর (m₁ = ${m1} kg) গতির সমীকরণ হতে টান, T₁ = m₁(g ${calc.dir === 1 ? '-' : '+'} a) = ${m1} × (9.8 ${calc.dir === 1 ? '-' : '+'} ${fmt(calc.a_sys)}) = <strong>${fmt(calc.T1)} N</strong><br>• বামপাশের বস্তুর (m₃ = ${m3} kg) গতির সমীকরণ হতে টান, T₂ = m₃(g ${calc.dir === 1 ? '+' : '-'} a) = ${m3} × (9.8 ${calc.dir === 1 ? '+' : '-'} ${fmt(calc.a_sys)}) = <strong>${fmt(calc.T2)} N</strong><br>সুতরাং দেখা যাচ্ছে, <strong>T₁ = T₂ = ${fmt(calc.T1)} N</strong> (সর্বত্র টান সমান)।`,
+                  `<strong>২য় ধাপ (${t} সেকেন্ডে অতিক্রান্ত দূরত্ব ও শেষবেগ নির্ণয়):</strong><br>স্থির অবস্থান (u = 0) হতে t = ${t} s সময়ে,<br>• অতিক্রান্ত দূরত্ব, s = ½at² = 0.5 × ${fmt(calc.a_sys)} × (${t})² = <strong>${fmt(calc.s_disp)} m</strong><br>• প্রাপ্ত শেষবেগ, v = at = ${fmt(calc.a_sys)} × ${t} = <strong>${fmt(calc.v_final)} ms⁻¹</strong>`,
+                  `<strong>চূড়ান্ত সিদ্ধান্ত:</strong> উভয় পাশের সুতার টান সমান (<strong>${fmt(calc.T1)} N</strong>) এবং ${t} সেকেন্ডে বস্তু দুটি <strong>${fmt(calc.s_disp)} m</strong> দূরত্ব অতিক্রম করবে।`
+                ]
+              }
+            ];
+            return applyCustomCqOverrides({ stem, telemetry, questions });
+          } else {
+            const isEqualTension = Math.abs(calc.T1 - calc.T2) < 0.001;
+            const stem = `<strong>উদ্দীপক (৩-বস্তুর কপিকল ব্যবস্থা):</strong> একটি কাঠের টেবিলের ওপর <strong>m₂ = ${m2} kg</strong> ভরের একটি ব্লক রাখা আছে। ব্লকটির দুই প্রান্তে সুতার সাহায্যে কপিকলের মাধ্যমে ডানপাশে <strong>m₁ = ${m1} kg</strong> এবং বামপাশে <strong>m₃ = ${m3} kg</strong> ভরের দুটি বস্তু ঝুলানো আছে। কাঠের তলের গতীয় ঘর্ষণ সহগ <strong>μ = ${mu}</strong> এবং অতিরিক্ত বাধাদানকারী বল <strong>f<sub>ext</sub> = ${f_table} N</strong>। পরবর্তীতে <strong>${t} s</strong> ধরে এদের গতি পর্যবেক্ষণ করা হলো।`;
+            const telemetry = [
+              { label: 'ব্যবস্থার ত্বরণ (a)', val: `${fmt(calc.a_sys)} ms⁻²`, color: 'text-blue-600' },
+              { label: 'ডান সুতার টান (T₁)', val: `${fmt(calc.T1)} N`, color: 'text-emerald-600' },
+              { label: 'বাম সুতার টান (T₂)', val: `${fmt(calc.T2)} N`, color: 'text-indigo-600' },
+              { label: 'তলের মোট বাধা (f)', val: `${fmt(calc.f_resist)} N`, color: 'text-amber-600' }
+            ];
+            const questions = [
+              {
+                id: 'pul_q1',
+                badge: 'গ নম্বর প্রশ্ন (৩ মার্কস — প্রয়োগমূলক)',
+                title: `প্রশ্ন ১ (গ): উদ্দীপকের ৩-বস্তুর কপিকল ব্যবস্থার কার্যকর ত্বরণ (a) এবং কাঠের তলের মোট বাধাদানকারী বল নির্ণয় করো।`,
+                steps: [
+                  `<strong>১ম ধাপ (দেওয়া আছে):</strong><br>• ডানপাশের ঝুলন্ত ভর, m₁ = ${m1} kg; কাঠের ওপর রাখা ভর, m₂ = ${m2} kg; বামপাশের ঝুলন্ত ভর, m₃ = ${m3} kg<br>• মোট ভর, M = m₁ + m₂ + m₃ = ${m1} + ${m2} + ${m3} = <strong>${calc.M_total} kg</strong><br>• কাঠের তলের ঘর্ষণ সহগ, μ = ${mu}; অতিরিক্ত বাধা, f<sub>ext</sub> = ${f_table} N এবং g = 9.8 ms⁻²`,
+                  `<strong>২য় ধাপ (কাঠের তলের মোট বাধাদানকারী বল নির্ণয়):</strong><br>• তলের ওপর রাখা m₂ বস্তুর গতীয় ঘর্ষণ বল, f<sub>k</sub> = μm₂g = ${mu} × ${m2} × 9.8 = <strong>${fmt(calc.f_k2)} N</strong><br>• সুতরাং তলের মোট বাধাদানকারী বল, f<sub>total</sub> = f<sub>k</sub> + f<sub>ext</sub> = ${fmt(calc.f_k2)} + ${f_table} = <strong>${fmt(calc.f_resist)} N</strong>`,
+                  `<strong>৩য় ধাপ (চালক বল ও সাধারণ ত্বরণ নির্ণয়):</strong><br>• ঝুলন্ত ভরদ্বয়ের ওজনের পার্থক্যজনিত চালক বল, F<sub>drive</sub> = |m₁ - m₃|g = |${m1} - ${m3}| × 9.8 = <strong>${fmt(calc.F_drive_mag)} N</strong><br>• নিট কার্যকর বল, F<sub>net</sub> = ${calc.F_drive_mag > calc.f_resist ? `F<sub>drive</sub> - f<sub>total</sub> = ${fmt(calc.F_drive_mag)} - ${fmt(calc.f_resist)} = <strong>${fmt(calc.F_net)} N</strong>` : `<strong>0 N</strong> (কারণ চালক বল ${fmt(calc.F_drive_mag)} N তলের সর্বাধিক বাধাদানকারী বল ${fmt(calc.f_resist)} N অপেক্ষা কম বা সমান হওয়ায় ব্যবস্থাটি স্থির থাকবে)`}<br>• সাধারণ ত্বরণ, a = <span class="fraction"><span class="num">F<sub>net</sub></span><span class="den">m₁ + m₂ + m₃</span></span> = <span class="fraction"><span class="num">${fmt(calc.F_net)}</span><span class="den">${calc.M_total}</span></span> = <strong>${fmt(calc.a_sys)} ms⁻²</strong>`,
+                  `<strong>চূড়ান্ত উত্তর:</strong> কাঠের তলের মোট বাধাদানকারী বল <strong>${fmt(calc.f_resist)} N</strong> এবং কপিকল ব্যবস্থার সাধারণ ত্বরণ <strong>${fmt(calc.a_sys)} ms⁻²</strong>।`
+                ]
+              },
+              {
+                id: 'pul_q2',
+                badge: 'ঘ নম্বর প্রশ্ন (৪ মার্কস — উচ্চতর দক্ষতা)',
+                title: `প্রশ্ন ২ (ঘ): উভয় পাশের সুতার টান (T₁ ও T₂) সমান হবে কি না এবং স্থির অবস্থান হতে ${t} সেকেন্ডে বস্তুগুলো কত দূরত্ব অতিক্রম করবে? গাণিতিক বিশ্লেষণ করো।`,
+                steps: [
+                  `<strong>১ম ধাপ (ডানপাশের সুতার টান T₁ ও বামপাশের সুতার টান T₂ নির্ণয়):</strong><br>${calc.F_net === 0 ? `যেহেতু ব্যবস্থাটি স্থির (a = 0 ms⁻²), তাই:<br>• ডানপাশের সুতার টান, T₁ = m₁g = ${m1} × 9.8 = <strong>${fmt(calc.T1)} N</strong><br>• বামপাশের সুতার টান, T₂ = m₃g = ${m3} × 9.8 = <strong>${fmt(calc.T2)} N</strong>` : `• ডানপাশের m₁ ভরের সমীকরণ হতে, T₁ = m₁(g ${calc.dir === 1 ? '-' : '+'} a) = ${m1} × (9.8 ${calc.dir === 1 ? '-' : '+'} ${fmt(calc.a_sys)}) = <strong>${fmt(calc.T1)} N</strong><br>• বামপাশের m₃ ভরের সমীকরণ হতে, T₂ = m₃(g ${calc.dir === 1 ? '+' : '-'} a) = ${m3} × (9.8 ${calc.dir === 1 ? '+' : '-'} ${fmt(calc.a_sys)}) = <strong>${fmt(calc.T2)} N</strong>`}`,
+                  `<strong>২য় ধাপ (টান দুটির তুলনা ও কারণ বিশ্লেষণ):</strong><br>দেখা যাচ্ছে, ${isEqualTension ? `উভয় সুতার টান সমান (<strong>T₁ = T₂ = ${fmt(calc.T1)} N</strong>), কারণ উভয় পাশের ঝুলন্ত ভর সমান এবং ত্বরণ শূন্য।` : `<strong>T₁ ≠ T₂</strong> (টানের পার্থক্য |T₁ - T₂| = <strong>${fmt(Math.abs(calc.T1 - calc.T2))} N</strong>)। কারণ মাঝখানে টেবিলের ওপর m₂ = ${m2} kg ভর থাকায় তাকে ত্বরণ দিতে এবং তলের ঘর্ষণ অতিক্রম করতে <strong>|T₁ - T₂| = m₂a + f<sub>total</sub></strong> বল ব্যয় হয়।`}`,
+                  `<strong>৩য় ধাপ (${t} সেকেন্ডে অতিক্রান্ত দূরত্ব নির্ণয়):</strong><br>স্থির অবস্থান (u = 0) হতে t = ${t} s সময়ে অতিক্রান্ত দূরত্ব,<br>s = ½at² = 0.5 × ${fmt(calc.a_sys)} × (${t})² = <strong>${fmt(calc.s_disp)} m</strong> এবং প্রাপ্ত বেগ v = at = <strong>${fmt(calc.v_final)} ms⁻¹</strong>।`,
+                  `<strong>চূড়ান্ত সিদ্ধান্ত:</strong> ডান সুতার টান <strong>T₁ = ${fmt(calc.T1)} N</strong>, বাম সুতার টান <strong>T₂ = ${fmt(calc.T2)} N</strong> (${isEqualTension ? 'সমান' : 'অসমান'}) এবং ${t} সেকেন্ডে অতিক্রান্ত দূরত্ব <strong>${fmt(calc.s_disp)} m</strong>।`
+                ]
+              }
+            ];
+            return applyCustomCqOverrides({ stem, telemetry, questions });
+          }
+        }
+
+        if (state.activeTopic === 'gravity') {
+          const { M1, M2, d, h_km, m_sat } = state.gravity;
+          const stem = `<strong>উদ্দীপক (ল্যাবের বর্তমান মান):</strong> মহাকর্ষ পরীক্ষণে <strong>M₁ = ${M1} kg</strong> এবং <strong>M₂ = ${M2} kg</strong> ভরের দুটি গোলক পরস্পর হতে <strong>d = ${d} m</strong> দূরত্বে রাখা আছে। অপরদিকে <strong>m = ${m_sat} kg</strong> ভরের একটি উপগ্রহকে ভূপৃষ্ঠ হতে <strong>h = ${h_km} km</strong> উচ্চতায় উঠানো হলো। (পৃথিবীর ব্যাসার্ধ R = 6400 km, ভূপৃষ্ঠে g = 9.8 ms⁻², G = 6.673 × 10⁻¹¹ Nm²kg⁻²)।`;
+          const telemetry = [
+            { label: 'মহাকর্ষ বল (F)', val: `${fmtSciText(calc.F_grav, 3)} N`, color: 'text-indigo-600' },
+            { label: 'নিষ্ক্রিয় বিন্দু (M₁ হতে x)', val: `${fmt(calc.x_neutral, 3)} m`, color: 'text-blue-600' },
+            { label: `${h_km}km উচ্চতায় g'`, val: `${fmt(calc.g_height, 3)} ms⁻²`, color: 'text-emerald-600' },
+            { label: 'উচ্চতায় ওজন (W\')', val: `${fmt(calc.W_height)} N`, color: 'text-amber-600' }
+          ];
+          const questions = [
+            {
+              id: 'grav_q1',
+              badge: 'গ নম্বর প্রশ্ন (৩ মার্কস — প্রয়োগমূলক)',
+              title: `প্রশ্ন ১ (গ): উদ্দীপকের গোলক দুটির মধ্যকার মহাকর্ষ বল নির্ণয় করো এবং ভূপৃষ্ঠ হতে ${h_km} km উচ্চতায় অভিকর্ষজ ত্বরণ (g') ও উপগ্রহটির ওজন কত হবে?`,
+              steps: [
+                `<strong>১ম ধাপ (দেওয়া আছে):</strong><br>• ১ম গোলকের ভর, M₁ = ${M1} kg এবং ২য় গোলকের ভর, M₂ = ${M2} kg<br>• গোলকদ্বয়ের মধ্যবর্তী দূরত্ব, d = ${d} m এবং মহাকর্ষীয় ধ্রুবক, G = 6.673 × 10⁻¹¹ Nm²kg⁻²<br>• পৃথিবীর ব্যাসার্ধ, R = 6400 km; উচ্চতা, h = ${h_km} km এবং উপগ্রহের ভর, m = ${m_sat} kg`,
+                `<strong>২য় ধাপ (গোলকদ্বয়ের মধ্যকার মহাকর্ষ বল F নির্ণয়):</strong><br>নিউটনের মহাকর্ষ সূত্রানুসারে,<br>F = G <span class="fraction"><span class="num">M₁M₂</span><span class="den">d²</span></span> = 6.673 × 10<sup>-11</sup> × <span class="fraction"><span class="num">${M1} × ${M2}</span><span class="den">(${d})²</span></span> = <strong>${fmtSciHtml(calc.F_grav, 4)} N</strong>`,
+                `<strong>৩য় ধাপ (${h_km} km উচ্চতায় অভিকর্ষজ ত্বরণ g' ও ওজন W' নির্ণয়):</strong><br>• উচ্চতায় অভিকর্ষজ ত্বরণ, g' = g × <span class="fraction"><span class="num">R²</span><span class="den">(R + h)²</span></span> = 9.8 × <span class="fraction"><span class="num">(6400)²</span><span class="den">(6400 + ${h_km})²</span></span> = <strong>${fmt(calc.g_height, 3)} ms⁻²</strong><br>• ভূপৃষ্ঠে ওজন W = mg = ${m_sat} × 9.8 = ${fmt(calc.W_surface)} N এবং ${h_km} km উচ্চতায় ওজন, W' = mg' = ${m_sat} × ${fmt(calc.g_height, 3)} = <strong>${fmt(calc.W_height)} N</strong>`,
+                `<strong>চূড়ান্ত উত্তর:</strong> গোলকদ্বয়ের মধ্যকার মহাকর্ষ বল <strong>${fmtSciHtml(calc.F_grav, 4)} N</strong>, ${h_km} km উচ্চতায় অভিকর্ষজ ত্বরণ <strong>${fmt(calc.g_height, 3)} ms⁻²</strong> এবং উপগ্রহটির ওজন <strong>${fmt(calc.W_height)} N</strong>।`
+              ]
+            },
+            {
+              id: 'grav_q2',
+              badge: 'ঘ নম্বর প্রশ্ন (৪ মার্কস — উচ্চতর দক্ষতা)',
+              title: `প্রশ্ন ২ (ঘ): গোলক দুটির সংযোজক সরলরেখার ঠিক কোথায় অন্য একটি একক ভরের বস্তু রাখলে তার ওপর লব্ধি মহাকর্ষ বল শূন্য হবে? গাণিতিকভাবে বিশ্লেষণ করো।`,
+              steps: [
+                `<strong>১ম ধাপ (সমীকরণ গঠন):</strong><br>ধরি, ১ম গোলক (M₁ = ${M1} kg) হতে সংযোজক সরলরেখা বরাবর <strong>x মিটার</strong> দূরত্বে এবং ২য় গোলক (M₂ = ${M2} kg) হতে <strong>(${d} - x) মিটার</strong> দূরত্বে 1 kg ভরের একটি বস্তু রাখলে উভয় গোলকের আকর্ষণ বল সমান ও বিপরীতমুখী হবে (ফলে লব্ধি মহাকর্ষ বল শূন্য হবে)।`,
+                `<strong>২য় ধাপ (শর্তানুসারে সূত্র প্রয়োগ):</strong><br>১ম গোলক কর্তৃক আকর্ষণ বল (F₁) = ২য় গোলক কর্তৃক আকর্ষণ বল (F₂)<br>বা, G <span class="fraction"><span class="num">M₁ × 1</span><span class="den">x²</span></span> = G <span class="fraction"><span class="num">M₂ × 1</span><span class="den">(${d} - x)²</span></span> &nbsp;⇒&nbsp; <span class="fraction"><span class="num">${M1}</span><span class="den">x²</span></span> = <span class="fraction"><span class="num">${M2}</span><span class="den">(${d} - x)²</span></span>`,
+                `<strong>৩য় ধাপ (বর্গমূল করে x এর মান নির্ণয়):</strong><br>উভয়পক্ষে বর্গমূল করে পাই,<br><span class="fraction"><span class="num">${d} - x</span><span class="den">x</span></span> = <span class="fraction"><span class="num">√${M2}</span><span class="den">√${M1}</span></span> = ${fmt(calc.ratioSqrt, 4)}<br>বা, ${d} - x = ${fmt(calc.ratioSqrt, 4)}x &nbsp;⇒&nbsp; x(1 + ${fmt(calc.ratioSqrt, 4)}) = ${d}<br>সুতরাং, x = <span class="fraction"><span class="num">${d}</span><span class="den">${fmt(1 + calc.ratioSqrt, 4)}</span></span> = <strong>${fmt(calc.x_neutral, 3)} m</strong>`,
+                `<strong>চূড়ান্ত সিদ্ধান্ত:</strong> ১ম গোলক (M₁ = ${M1} kg) হতে <strong>${fmt(calc.x_neutral, 3)} m</strong> দূরত্বে এবং ২য় গোলক (M₂ = ${M2} kg) হতে <strong>(${d} - ${fmt(calc.x_neutral, 3)}) = ${fmt(d - calc.x_neutral, 3)} m</strong> দূরত্বে বস্তুটি স্থাপন করলে তার ওপর লব্ধি মহাকর্ষ বল শূন্য হবে।`
+              ]
+            }
+          ];
+          return applyCustomCqOverrides({ stem, telemetry, questions });
+        }
+      }
+
+      function applyCustomCqOverrides(result) {
+        const cq = state.customCQ[state.activeTopic];
+        if (!cq) return result;
+        if (cq.stem && cq.stem.trim()) {
+          result.stem = `<strong>✍️ তোমার দেওয়া সৃজনশীল উদ্দীপক:</strong> ${cq.stem.trim()}<br><span class="text-xs text-blue-700 font-sans mt-1 inline-block">(${result.stem.replace(/<strong>উদ্দীপক[^:]*:<\/strong>\s*/, 'ল্যাবে ব্যবহৃত মান: ')})</span>`;
+        }
+        if (cq.q1 && cq.q1.trim() && result.questions[0]) {
+          result.questions[0].title = cq.q1.trim();
+          result.questions[0].badge = 'গ নম্বর প্রশ্ন (৩ মার্কস — কাস্টম সৃজনশীল)';
+        }
+        if (cq.q2 && cq.q2.trim() && result.questions[1]) {
+          result.questions[1].title = cq.q2.trim();
+          result.questions[1].badge = 'ঘ নম্বর প্রশ্ন (৪ মার্কস — কাস্টম সৃজনশীল)';
+        }
+        return result;
+      }
+
+      function updateAllViews() {
+        const data = buildSolvedQuestionsData();
+        updateExtraMassButtonUI();
+
+        // Update Telemetry
+        const telGrid = document.getElementById('telemetryGrid');
+        telGrid.innerHTML = data.telemetry.map(item => `
+          <div class="bg-slate-50 border border-slate-200/90 rounded-xl p-2.5 text-center">
+            <div class="text-[11px] font-semibold text-slate-500">${item.label}</div>
+            <div class="text-sm sm:text-base font-bold font-mono mt-0.5 ${item.color}">${item.val}</div>
+          </div>
+        `).join('');
+
+        // Update Stem
+        document.getElementById('liveStemBox').innerHTML = `
+          <div class="text-sm sm:text-base text-slate-800 leading-relaxed font-serif-bn">${data.stem}</div>
+        `;
+
+        // Update Solved Questions with Direct Per-Question PDF Download Buttons
+        const qGrid = document.getElementById('solvedQuestionsGrid');
+        qGrid.innerHTML = '';
+        data.questions.forEach((q) => {
+          const card = document.createElement('div');
+          card.className = 'border border-slate-200 rounded-2xl p-4 sm:p-5 bg-white shadow-sm hover:border-blue-300 transition';
+          card.innerHTML = `
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">${q.badge}</span>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button type="button" data-qid="${q.id}" class="add-single-pdf-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 transition border border-blue-200 flex items-center gap-1">
+                  <span>📥</span>
+                  <span>এই প্রশ্নের সমাধান পিডিএফ ডাউনলোড</span>
+                </button>
+                <button type="button" data-qid="${q.id}" class="print-single-pdf-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-800 hover:text-white text-slate-700 transition border border-slate-200">
+                  🖨️ প্রিন্ট
+                </button>
+              </div>
+            </div>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 mb-3 font-serif-bn">${q.title}</h3>
+            <div class="space-y-2.5 text-sm text-slate-800 leading-relaxed font-serif-bn">
+              ${q.steps.map(step => `<div class="math-box p-3 rounded-lg">${step}</div>`).join('')}
+            </div>
+          `;
+          card.querySelector('.add-single-pdf-btn').addEventListener('click', () => {
+            const singleItem = [{
+              topicTitle: topicConfigs[state.activeTopic].title,
+              stem: data.stem,
+              questionTitle: q.title,
+              badge: q.badge,
+              steps: q.steps
+            }];
+            exportItemsToPdf(singleItem, `StudyPulse_${state.activeTopic}_${q.id}.pdf`, 'download');
+          });
+          card.querySelector('.print-single-pdf-btn').addEventListener('click', () => {
+            const singleItem = [{
+              topicTitle: topicConfigs[state.activeTopic].title,
+              stem: data.stem,
+              questionTitle: q.title,
+              badge: q.badge,
+              steps: q.steps
+            }];
+            exportItemsToPdf(singleItem, `StudyPulse_${state.activeTopic}_${q.id}.pdf`, 'print');
+          });
+          qGrid.appendChild(card);
+        });
+
+        drawCanvas();
+      }
+
+      // ---------- DIRECT IN-TAB PDF GENERATION & PRINT ENGINE ----------
+      function buildCurrentTopicPdfItems() {
+        const data = buildSolvedQuestionsData();
+        return data.questions.map(q => ({
+          topicTitle: topicConfigs[state.activeTopic].title,
+          stem: data.stem,
+          questionTitle: q.title,
+          badge: q.badge,
+          steps: q.steps
+        }));
+      }
+
+      function buildTheoryPdfItems() {
+        return [
+          {
+            topicTitle: 'অধ্যায় ৩: বল (Force) — পূর্ণাঙ্গ গাণিতিক সূত্রাবলি',
+            stem: '<strong>এসএসসি পদার্থবিজ্ঞান (অধ্যায় ৩ - বল) এর সকল গাণিতিক সূত্রের সারসংক্ষেপ:</strong>',
+            questionTitle: '১. নিউটনের ২য় সূত্র, ঘর্ষণ, কপিকল, ভরবেগ ও মহাকর্ষের সূত্রসমূহ',
+            badge: 'সূত্র সারসংক্ষেপ',
+            steps: [
+              '<strong>১. নিউটনের ২য় সূত্র ও ঘর্ষণ বল:</strong> অভিলম্বিক প্রতিক্রিয়া R = mg, গতীয় ঘর্ষণ বল f<sub>k</sub> = μmg এবং নিট কার্যকর বল F<sub>net</sub> = F - (μmg + f<sub>ext</sub>) = ma। চলন্ত গাড়ির ওপর হঠাৎ Δm ভর চাপানো হলে ভরবেগের সংরক্ষণে তাৎক্ষণিক বেগ u\' = mu / (m + Δm)।',
+              '<strong>২. ভরবেগের সংরক্ষণশীলতা ও সংঘর্ষ:</strong> m₁u₁ + m₂u₂ = (m₁ + m₂)v &nbsp;⇒&nbsp; মিলিত বেগ v = (m₁u₁ + m₂u₂) / (m₁ + m₂)। বলের ঘাত J = m(v - u) এবং ঘাত বল F = |J| / t।',
+              '<strong>৩. বন্দুকের পশ্চাৎ বেগ ও তক্তা ভেদ:</strong> MV + mv = 0 &nbsp;⇒&nbsp; পশ্চাৎ বেগ V = - mv / M। তক্তার পুরুত্ব s হলে মন্দন a = (v² - v₁²) / 2s এবং বাধাদানকারী বল F = ma।',
+              '<strong>৪. কপিকল ব্যবস্থা (২-বস্তু ও ৩-বস্তু):</strong> ২-বস্তুর সাধারণ কপিকলে ত্বরণ a = |m₁ - m₃|g / (m₁ + m₃) এবং অভিন্ন সুতায় টান সমান: T₁ = T₂ = 2m₁m₃g / (m₁ + m₃)। ৩-বস্তুর কপিকলে (মাঝখানে টেবিলের ওপর m₂ থাকলে) ত্বরণ a = (|m₁ - m₃|g - f<sub>total</sub>) / (m₁ + m₂ + m₃) এবং |T₁ - T₂| = m₂a + f<sub>total</sub>।',
+              '<strong>৫. মহাকর্ষ বল ও অভিকর্ষজ ত্বরণ (g):</strong> মহাকর্ষ বল F = GM₁M₂ / d² (যেখানে G = 6.673 × 10⁻¹¹ Nm²kg⁻²)। ভূপৃষ্ঠ হতে h উচ্চতায় অভিকর্ষজ ত্বরণ g\' = g × R² / (R + h)² এবং নিষ্ক্রিয় বিন্দুর দূরত্ব x = d / (1 + √(M₂/M₁))।'
+            ]
+          },
+          {
+            topicTitle: 'অধ্যায় ৩: বল (Force) — গুরুত্বপূর্ণ অনুধাবনমূলক প্রশ্নোত্তর (খ নম্বর)',
+            stem: '<strong>বোর্ড পরীক্ষার জন্য বাছাইকৃত অনুধাবনমূলক প্রশ্ন ও উত্তর:</strong>',
+            questionTitle: '২. পরীক্ষায় আসার মতো গুরুত্বপূর্ণ অনুধাবনমূলক প্রশ্নোত্তর',
+            badge: 'অনুধাবন নোট (২ মার্কস)',
+            steps: [
+              '<strong>প্রশ্ন ১: চলন্ত বাস হঠাৎ ব্রেক করলে যাত্রীরা সামনের দিকে ঝুঁকে পড়ে কেন?</strong><br>উত্তর: গতি জড়তার কারণে এমনটি ঘটে। বাস যখন চলন্ত অবস্থায় থাকে, তখন যাত্রীর পুরো শরীর বাসের সাথে একই গতিতে গতিশীল থাকে। বাস হঠাৎ ব্রেক করলে যাত্রীর শরীরের নিচের অংশ বাসের সাথে স্থির হয়ে যায়, কিন্তু শরীরের উপরের অংশ গতি জড়তার কারণে সামনের দিকে এগিয়ে যেতে চায়। ফলে যাত্রী সামনের দিকে ঝুঁকে পড়ে।',
+              '<strong>প্রশ্ন ২: কপিকলে কখন সুতার টান সমান (T₁ = T₂) হয় এবং কখন আলাদা হয়?</strong><br>উত্তর: একটি ঘর্ষণহীন হালকা কপিকলের দুই প্রান্তে সরাসরি দুটি ভর (m₁ ও m₃) ঝুলানো থাকলে ভরহীন অভিন্ন সুতার সর্বত্র টান সমান থাকে (T₁ = T₂ = T)। কিন্তু সুতার মাঝখানে টেবিলের ওপর আরেকটি ভর (m₂) যুক্ত থাকলে মাঝের বস্তুটির জড়তা (m₂a) ও তলের ঘর্ষণ বল (f) অতিক্রম করতে দুই পাশের সুতার টানে পার্থক্য সৃষ্টি হয় (|T₁ - T₂| = m₂a + f)।',
+              '<strong>প্রশ্ন ৩: বিষুবীয় অঞ্চল থেকে মেরু অঞ্চলের দিকে গেলে বস্তুর ওজন বৃদ্ধি পায় কেন?</strong><br>উত্তর: পৃথিবী উত্তর-দক্ষিণে কিছুটা চাপা হওয়ায় বিষুবীয় অঞ্চল অপেক্ষা মেরু অঞ্চলে পৃথিবীর ব্যাসার্ধ (R) কম। যেহেতু g = GM/R², তাই ব্যাসার্ধ কম হওয়ায় মেরু অঞ্চলে g এর মান বেশি (9.83 ms⁻²) এবং ওজন W = mg হওয়ায় মেরু অঞ্চলে বস্তুর ওজন বৃদ্ধি পায়।'
+            ]
+          }
+        ];
+      }
+
+      function addItemToPdfQueue(item) {
+        state.pdfQueue = [item];
+        updatePdfSheetUI();
+      }
+
+      function addAllCurrentTopicToPdf() {
+        state.pdfQueue = buildCurrentTopicPdfItems();
+        updatePdfSheetUI();
+      }
+
+      function updatePdfSheetUI() {
+        const badge = document.getElementById('pdfQueueCountBadge');
+        if (badge) badge.textContent = state.pdfQueue.length.toString();
+
+        const studentInput = document.getElementById('studentNameInput');
+        const studentVal = studentInput ? studentInput.value.trim() : '';
+        document.getElementById('pdfStudentNameDisplay').textContent = studentVal
+          ? `শিক্ষার্থী: ${studentVal}`
+          : 'শিক্ষার্থী: সাধারণ প্রস্তুতি শিট';
+
+        const container = document.getElementById('pdfItemsContainer');
+        container.innerHTML = '';
+
+        state.pdfQueue.forEach((item, index) => {
+          const block = document.createElement('div');
+          block.className = 'page-break-item border border-slate-300 rounded-xl p-4 bg-white relative';
+          block.innerHTML = `
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
+              <div>
+                <span class="text-xs font-bold text-blue-700 uppercase">${item.topicTitle}</span>
+                <span class="ml-2 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700">${item.badge}</span>
+              </div>
+            </div>
+            <div class="text-xs sm:text-sm bg-slate-50 p-2.5 rounded-lg border border-slate-200 mb-3 font-serif-bn text-slate-700">
+              ${item.stem}
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm sm:text-base mb-2.5 font-serif-bn">${index + 1}. ${item.questionTitle}</h4>
+            <div class="space-y-2 text-xs sm:text-sm text-slate-800 leading-relaxed font-serif-bn">
+              ${item.steps.map(st => `<div class="p-2.5 rounded bg-slate-50/70 border-l-4 border-blue-600">${st}</div>`).join('')}
+            </div>
+          `;
+          container.appendChild(block);
+        });
+      }
+
+      function exportItemsToPdf(items, filename, mode = 'download') {
+        state.pdfQueue = items;
+        updatePdfSheetUI();
+
+        const viewPdfSec = document.getElementById('viewPdf');
+        const element = document.getElementById('printableArea');
+
+        if (mode === 'print') {
+          window.print();
+          return;
+        }
+
+        if (window.html2pdf) {
+          showToast('পিডিএফ ডাউনলোড শুরু হচ্ছে, অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন...');
+          viewPdfSec.classList.remove('hidden');
+          const opt = {
+            margin: [10, 10, 10, 10],
+            filename: filename || 'StudyPulse_SSC_Physics_Force_Solutions.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          };
+          window.html2pdf().set(opt).from(element).save().then(() => {
+            viewPdfSec.classList.add('hidden');
+            showToast('পিডিএফ সফলভাবে ডাউনলোড হয়েছে!');
+          }).catch(() => {
+            viewPdfSec.classList.add('hidden');
+            window.print();
+          });
+        } else {
+          window.print();
+        }
+      }
+
+      // ---------- CANVAS SIMULATION ENGINE ----------
+      const canvas = document.getElementById('labCanvas');
+      const ctx = canvas.getContext('2d');
+      let animFrameId = null;
+      let lastTimestamp = null;
+
+      function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        canvas.width = rect.width * window.devicePixelRatio;
+        canvas.height = rect.height * window.devicePixelRatio;
+        ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+        drawCanvas();
+      }
+
+      function resetSimulation() {
+        state.isPlaying = false;
+        state.simTime = 0;
+        state.friction.dropAnimProg = 1;
+        const calc = computePhysics();
+        if (state.activeTopic === 'friction') {
+          state.friction.liveDist = 0;
+          state.friction.liveVel = calc.u_eff;
+        }
+        lastTimestamp = null;
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        document.getElementById('simPlayIcon').textContent = '▶';
+        document.getElementById('simPlayText').textContent = 'অ্যানিমেশন চালান';
+        document.getElementById('simStatusBadge').textContent = 'প্রস্তুত (Ready)';
+        document.getElementById('simTimerBadge').textContent = 'সময় t = 0.00 s';
+        drawCanvas();
+      }
+
+      function togglePlaySimulation() {
+        state.isPlaying = !state.isPlaying;
+        if (state.isPlaying) {
+          const calc = computePhysics();
+          let maxTime = 6;
+          if (state.activeTopic === 'friction') {
+            maxTime = state.friction.mode === 'brake' ? Math.min(10, Math.max(2, calc.t_stop + 0.5)) : state.friction.t;
+          } else if (state.activeTopic === 'collision') {
+            maxTime = 5;
+          } else if (state.activeTopic === 'recoil') {
+            maxTime = 4;
+          } else if (state.activeTopic === 'pulley') {
+            maxTime = state.pulley.t;
+          } else if (state.activeTopic === 'gravity') {
+            maxTime = 5;
+          }
+          if (state.simTime >= maxTime) {
+            state.simTime = 0;
+            if (state.activeTopic === 'friction') {
+              state.friction.liveDist = 0;
+              state.friction.liveVel = calc.u_eff;
+            }
+          }
+          document.getElementById('simPlayIcon').textContent = '⏸';
+          document.getElementById('simPlayText').textContent = 'বিরতি (Pause)';
+          document.getElementById('simStatusBadge').textContent = 'চলমান (Running)';
+          lastTimestamp = performance.now();
+          animFrameId = requestAnimationFrame(stepSimulation);
+        } else {
+          document.getElementById('simPlayIcon').textContent = '▶';
+          document.getElementById('simPlayText').textContent = 'অ্যানিমেশন চালান';
+          document.getElementById('simStatusBadge').textContent = 'বিরতি (Paused)';
+          if (animFrameId) cancelAnimationFrame(animFrameId);
+        }
+      }
+
+      function stepSimulation(now) {
+        if (!state.isPlaying) return;
+        const dt = Math.min(0.05, (now - lastTimestamp) / 1000);
+        lastTimestamp = now;
+        state.simTime += dt;
+
+        if (state.friction.dropAnimProg < 1) {
+          state.friction.dropAnimProg = Math.min(1, state.friction.dropAnimProg + dt * 3.5);
+        }
+
+        const calc = computePhysics();
+
+        if (state.activeTopic === 'friction') {
+          if (state.friction.mode === 'brake') {
+            if (state.friction.liveVel > 0) {
+              const vNext = Math.max(0, state.friction.liveVel - calc.a_ret * dt);
+              state.friction.liveDist += 0.5 * (state.friction.liveVel + vNext) * dt;
+              state.friction.liveVel = vNext;
+            }
+          } else {
+            const vNext = Math.max(0, state.friction.liveVel + calc.a * dt);
+            state.friction.liveDist += 0.5 * (state.friction.liveVel + vNext) * dt;
+            state.friction.liveVel = vNext;
+          }
+        }
+
+        let maxTime = 6;
+        if (state.activeTopic === 'friction') {
+          maxTime = state.friction.mode === 'brake' ? Math.min(10, Math.max(2, calc.t_stop + 0.5)) : state.friction.t;
+        } else if (state.activeTopic === 'collision') {
+          maxTime = 5;
+        } else if (state.activeTopic === 'recoil') {
+          maxTime = 4;
+        } else if (state.activeTopic === 'pulley') {
+          maxTime = state.pulley.t;
+        } else if (state.activeTopic === 'gravity') {
+          maxTime = 5;
+        }
+
+        if (state.simTime >= maxTime) {
+          state.simTime = maxTime;
+          state.isPlaying = false;
+          document.getElementById('simPlayIcon').textContent = '▶';
+          document.getElementById('simPlayText').textContent = 'পুনরায় চালান';
+          document.getElementById('simStatusBadge').textContent = 'সম্পন্ন (Completed)';
+        }
+
+        document.getElementById('simTimerBadge').textContent = `সময় t = ${state.simTime.toFixed(2)} s`;
+        drawCanvas();
+
+        if (state.isPlaying) {
+          animFrameId = requestAnimationFrame(stepSimulation);
+        }
+      }
+
+      function drawArrow(x1, y1, x2, y2, color, label) {
+        const headlen = 8;
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const angle = Math.atan2(dy, dx);
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(x2 - headlen * Math.cos(angle - Math.PI / 6), y2 - headlen * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(x2 - headlen * Math.cos(angle + Math.PI / 6), y2 - headlen * Math.sin(angle + Math.PI / 6));
+        ctx.closePath();
+        ctx.fill();
+
+        if (label) {
+          ctx.font = 'bold 11px "Hind Siliguri", sans-serif';
+          ctx.fillText(label, (x1 + x2) / 2 - 22, y1 - 8);
+        }
+        ctx.restore();
+      }
+
+      function drawCanvas() {
+        const w = canvas.parentElement.clientWidth;
+        const h = canvas.parentElement.clientHeight;
+        if (!w || !h) return;
+        ctx.clearRect(0, 0, w, h);
+
+        // Background Grid
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.1)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < w; x += 30) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = 0; y < h; y += 30) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        const calc = computePhysics();
+        const t = state.simTime;
+
+        // ==================== TOPIC 1: FRICTION & MOVING CAR MASS DROP ====================
+        if (state.activeTopic === 'friction') {
+          const groundY = h - 55;
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(0, groundY, w, 55);
+          ctx.strokeStyle = '#475569';
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(w, groundY); ctx.stroke();
+
+          const { m, extraMass, hasExtraMass, dropAnimProg, F_app, d_obs, mode } = state.friction;
+          const startX = 55;
+          const maxTrackPx = w - 150;
+          const scalePxPerM = Math.min(5.5, maxTrackPx / Math.max(d_obs + 15, 45));
+
+          const curDist = t === 0 ? 0 : state.friction.liveDist;
+          const curVel = t === 0 ? calc.u_eff : state.friction.liveVel;
+
+          const carX = Math.min(w - 105, startX + curDist * scalePxPerM);
+          const obsX = Math.min(w - 45, startX + d_obs * scalePxPerM);
+
+          if (mode === 'brake') {
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(obsX, groundY - 48, 16, 48);
+            ctx.fillStyle = '#fca5a5';
+            ctx.font = 'bold 11px "Hind Siliguri", sans-serif';
+            ctx.fillText(`বাধা (${d_obs}m)`, obsX - 20, groundY - 54);
+          }
+
+          ctx.fillStyle = '#38bdf8';
+          ctx.beginPath();
+          ctx.roundRect(carX, groundY - 38, 76, 28, 6);
+          ctx.fill();
+
+          ctx.fillStyle = '#0f172a';
+          ctx.strokeStyle = '#e2e8f0';
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(carX + 18, groundY - 8, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+          ctx.beginPath(); ctx.arc(carX + 58, groundY - 8, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+          ctx.fillStyle = '#0f172a';
+          ctx.font = 'bold 11px Inter, sans-serif';
+          ctx.fillText(`m=${m}kg`, carX + 11, groundY - 20);
+
+          if (hasExtraMass) {
+            const targetY = groundY - 62;
+            const currentBoxY = 20 + (targetY - 20) * dropAnimProg;
+            ctx.fillStyle = '#f59e0b';
+            ctx.strokeStyle = '#fef3c7';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.roundRect(carX + 14, currentBoxY, 48, 24, 4);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 10px Inter, sans-serif';
+            ctx.fillText(`+${extraMass}kg`, carX + 19, currentBoxY + 15);
+          }
+
+          if (mode === 'brake') {
+            drawArrow(carX, groundY - 25, carX - 48, groundY - 25, '#fb7185', `মোট বাধা=${fmt(calc.F_total_ret, 0)}N`);
+          } else {
+            drawArrow(carX + 76, groundY - 25, carX + 124, groundY - 25, '#34d399', `F=${F_app}N`);
+            if (calc.f_total > 0) {
+              drawArrow(carX, groundY - 20, carX - 45, groundY - 20, '#fbbf24', `f=${fmt(calc.f_total, 0)}N`);
+            }
+          }
+
+          ctx.fillStyle = '#cbd5e1';
+          ctx.font = '12px "Hind Siliguri", sans-serif';
+          ctx.fillText(`মোট ভর = ${calc.m_eff} kg  |  দূরত্ব s = ${fmt(curDist)} m  |  তাৎক্ষণিক বেগ v = ${fmt(curVel)} ms⁻¹`, 18, h - 20);
+        }
+
+        // ==================== TOPIC 2: COLLISION ====================
+        else if (state.activeTopic === 'collision') {
+          const groundY = h - 55;
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(0, groundY, w, 55);
+
+          const { m1, u1, m2, u2 } = state.collision;
+          const tCollide = 1.5;
+          const centerX = w / 2;
+
+          let x1, x2;
+          if (t <= tCollide) {
+            const dtBefore = tCollide - t;
+            x1 = centerX - 65 - u1 * dtBefore * 4;
+            x2 = centerX + 5 - u2 * dtBefore * 4;
+          } else {
+            const dtAfter = t - tCollide;
+            const shift = calc.v_comb * dtAfter * 5;
+            x1 = centerX - 65 + shift;
+            x2 = centerX + 5 + shift;
+          }
+
+          ctx.fillStyle = '#38bdf8';
+          ctx.beginPath(); ctx.roundRect(x1, groundY - 42, 60, 42, 8); ctx.fill();
+          ctx.fillStyle = '#0f172a';
+          ctx.font = 'bold 11px Inter, sans-serif';
+          ctx.fillText(`m₁=${m1}kg`, x1 + 5, groundY - 22);
+          ctx.fillText(`${t <= tCollide ? u1 : fmt(calc.v_comb, 1)}m/s`, x1 + 8, groundY - 8);
+
+          ctx.fillStyle = '#f43f5e';
+          ctx.beginPath(); ctx.roundRect(x2, groundY - 42, 60, 42, 8); ctx.fill();
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(`m₂=${m2}kg`, x2 + 5, groundY - 22);
+          ctx.fillText(`${t <= tCollide ? u2 : fmt(calc.v_comb, 1)}m/s`, x2 + 8, groundY - 8);
+
+          if (Math.abs(t - tCollide) < 0.18) {
+            ctx.fillStyle = '#facc15';
+            ctx.font = 'bold 14px "Hind Siliguri", sans-serif';
+            ctx.fillText('💥 সংঘর্ষ!', centerX - 28, groundY - 58);
+          }
+
+          ctx.fillStyle = '#cbd5e1';
+          ctx.font = '12px "Hind Siliguri", sans-serif';
+          ctx.fillText(`মিলিত বেগ v = ${fmt(calc.v_comb)} ms⁻¹   |   মোট ভরবেগ = ${fmt(calc.P_total)} kg·ms⁻¹`, 18, h - 20);
+        }
+
+        // ==================== TOPIC 3: RECOIL & PLANK ====================
+        else if (state.activeTopic === 'recoil') {
+          const midY = h / 2 + 15;
+          const gunStartX = 110;
+          const plankX = w - 130;
+
+          const recoilShift = Math.min(60, calc.V_recoil * t * 18);
+          const bulletShift = Math.min(w - 160, state.recoil.v * t * 0.45);
+
+          const gx = gunStartX - recoilShift;
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillRect(gx, midY - 12, 55, 14);
+          ctx.fillRect(gx - 12, midY - 4, 18, 26);
+          drawArrow(gx - 5, midY - 22, gx - 42, midY - 22, '#38bdf8', `V=${fmt(calc.V_recoil, 2)}m/s`);
+
+          ctx.fillStyle = '#d97706';
+          ctx.fillRect(plankX, midY - 48, 28, 86);
+          ctx.strokeStyle = '#fbbf24';
+          ctx.strokeRect(plankX, midY - 48, 28, 86);
+          ctx.fillStyle = '#fde68a';
+          ctx.font = 'bold 11px "Hind Siliguri", sans-serif';
+          ctx.fillText(`তক্তা (${state.recoil.s_cm}cm)`, plankX - 18, midY - 55);
+
+          const bx = gunStartX + 60 + bulletShift;
+          ctx.fillStyle = '#facc15';
+          ctx.beginPath();
+          ctx.arc(bx, midY - 5, 6, 0, Math.PI * 2);
+          ctx.fill();
+          drawArrow(bx + 8, midY - 5, bx + 42, midY - 5, '#facc15', `v=${state.recoil.v}m/s`);
+
+          ctx.fillStyle = '#cbd5e1';
+          ctx.font = '12px "Hind Siliguri", sans-serif';
+          ctx.fillText(`তক্তার বাধাদানকারী বল F = ${fmt(calc.F_plank)} N   |   ১ম তক্তার পর অতিরিক্ত ভেদ = ${fmt(calc.extra_planks)} টি`, 18, h - 20);
+        }
+
+        // ==================== TOPIC 4: PULLEY SYSTEM (2-BODY & 3-BODY) ====================
+        else if (state.activeTopic === 'pulley') {
+          const { pMode, m1, m2, m3 } = state.pulley;
+          const shiftPx = Math.min(52, 0.5 * calc.a_sys * t * t * 14) * calc.dir;
+
+          if (pMode === 'two_body') {
+            const cx = w / 2;
+            const py = 72;
+            const pRad = 32;
+
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(cx - 40, 22);
+            ctx.lineTo(cx + 40, 22);
+            ctx.moveTo(cx, 22);
+            ctx.lineTo(cx, py);
+            ctx.stroke();
+
+            ctx.fillStyle = '#334155';
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(cx, py, pRad, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            const leftX = cx - pRad;
+            const rightX = cx + pRad;
+            const m3Y = 148 - shiftPx;
+            const m1Y = 148 + shiftPx;
+
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(leftX, py);
+            ctx.lineTo(leftX, m3Y);
+            ctx.moveTo(rightX, py);
+            ctx.lineTo(rightX, m1Y);
+            ctx.stroke();
+
+            ctx.fillStyle = '#34d399';
+            ctx.beginPath(); ctx.roundRect(leftX - 25, m3Y, 50, 40, 6); ctx.fill();
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 11px Inter, sans-serif';
+            ctx.fillText(`m₃=${m3}kg`, leftX - 21, m3Y + 24);
+
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath(); ctx.roundRect(rightX - 25, m1Y, 50, 40, 6); ctx.fill();
+            ctx.fillStyle = '#0f172a';
+            ctx.fillText(`m₁=${m1}kg`, rightX - 21, m1Y + 24);
+
+            ctx.fillStyle = '#fde047';
+            ctx.font = 'bold 12px "Hind Siliguri", sans-serif';
+            ctx.fillText(`T₂ = ${fmt(calc.T2, 1)} N`, leftX - 88, py + 45);
+            ctx.fillText(`T₁ = ${fmt(calc.T1, 1)} N`, rightX + 16, py + 45);
+            ctx.fillStyle = '#86efac';
+            ctx.fillText(`✓ অভিন্ন সুতায় টান সমান (T₁ = T₂ = ${fmt(calc.T1)} N)`, cx - 115, h - 42);
+
+            ctx.fillStyle = '#cbd5e1';
+            ctx.font = '12px "Hind Siliguri", sans-serif';
+            ctx.fillText(`সাধারণ ত্বরণ a = ${fmt(calc.a_sys)} ms⁻²  |  সুতার টান T = ${fmt(calc.T1)} N`, 18, h - 18);
+          } else {
+            const tableW = Math.min(260, w * 0.44);
+            const tableX = (w - tableW) / 2;
+            const tableY = 105;
+            const tableH = 120;
+            const pRadius = 16;
+
+            ctx.fillStyle = '#92400e';
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.roundRect(tableX, tableY, tableW, 22, 4);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#78350f';
+            ctx.fillRect(tableX + 14, tableY + 22, 14, tableH);
+            ctx.fillRect(tableX + tableW - 28, tableY + 22, 14, tableH);
+
+            ctx.fillStyle = '#fde68a';
+            ctx.font = 'bold 11px "Hind Siliguri", sans-serif';
+            ctx.fillText(`কাঠের তল (μ=${state.pulley.mu}, বাধা=${fmt(calc.f_resist)}N)`, tableX + 22, tableY + 15);
+
+            const leftPX = tableX - pRadius + 4;
+            const rightPX = tableX + tableW + pRadius - 4;
+            const pY = tableY - pRadius + 6;
+
+            ctx.fillStyle = '#334155';
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.arc(leftPX, pY, pRadius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.arc(rightPX, pY, pRadius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+            const m2X = (w / 2) - 26 + shiftPx;
+            const m2Y = tableY - 36;
+            const m3X = leftPX - pRadius - 20;
+            const m3Y = tableY + 42 - shiftPx;
+            const m1X = rightPX + pRadius - 24;
+            const m1Y = tableY + 42 + shiftPx;
+
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(leftPX - pRadius, m3Y);
+            ctx.lineTo(leftPX - pRadius, pY);
+            ctx.moveTo(leftPX, pY - pRadius);
+            ctx.lineTo(m2X, m2Y + 18);
+            ctx.moveTo(m2X + 52, m2Y + 18);
+            ctx.lineTo(rightPX, pY - pRadius);
+            ctx.moveTo(rightPX + pRadius, pY);
+            ctx.lineTo(rightPX + pRadius, m1Y);
+            ctx.stroke();
+
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath(); ctx.roundRect(m2X, m2Y, 52, 36, 5); ctx.fill();
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 11px Inter, sans-serif';
+            ctx.fillText(`m₂=${m2}kg`, m2X + 4, m2Y + 22);
+
+            ctx.fillStyle = '#34d399';
+            ctx.beginPath(); ctx.roundRect(m3X, m3Y, 46, 38, 5); ctx.fill();
+            ctx.fillStyle = '#0f172a';
+            ctx.fillText(`m₃=${m3}kg`, m3X + 3, m3Y + 23);
+
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath(); ctx.roundRect(m1X, m1Y, 46, 38, 5); ctx.fill();
+            ctx.fillStyle = '#0f172a';
+            ctx.fillText(`m₁=${m1}kg`, m1X + 3, m1Y + 23);
+
+            ctx.fillStyle = '#93c5fd';
+            ctx.font = 'bold 11px Inter, sans-serif';
+            ctx.fillText(`T₂=${fmt(calc.T2, 1)}N`, leftPX + 12, m2Y - 6);
+            ctx.fillText(`T₁=${fmt(calc.T1, 1)}N`, rightPX - 68, m2Y - 6);
+
+            ctx.fillStyle = '#cbd5e1';
+            ctx.font = '12px "Hind Siliguri", sans-serif';
+            ctx.fillText(`সাধারণ ত্বরণ a = ${fmt(calc.a_sys)} ms⁻²  |  টান T₁ = ${fmt(calc.T1)} N, T₂ = ${fmt(calc.T2)} N`, 18, h - 20);
+          }
+        }
+
+        // ==================== TOPIC 5: UNIVERSAL GRAVITATION & g ====================
+        else if (state.activeTopic === 'gravity') {
+          const { M1, M2, d, h_km } = state.gravity;
+          const cy = h * 0.45;
+          const x1 = w * 0.22;
+          const x2 = w * 0.62;
+
+          ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+          ctx.setLineDash([5, 5]);
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.moveTo(x1, cy); ctx.lineTo(x2, cy); ctx.stroke();
+          ctx.setLineDash([]);
+
+          const ratio = calc.x_neutral / d;
+          const nx = x1 + (x2 - x1) * ratio;
+          ctx.fillStyle = '#facc15';
+          ctx.beginPath(); ctx.arc(nx, cy, 6, 0, Math.PI * 2); ctx.fill();
+          ctx.font = 'bold 11px "Hind Siliguri", sans-serif';
+          ctx.fillText(`নিষ্ক্রিয় বিন্দু (x=${fmt(calc.x_neutral, 2)}m)`, nx - 45, cy - 16);
+
+          const r1 = Math.min(36, 18 + Math.sqrt(M1) * 0.22);
+          ctx.fillStyle = '#38bdf8';
+          ctx.beginPath(); ctx.arc(x1, cy, r1, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#0f172a';
+          ctx.font = 'bold 11px Inter, sans-serif';
+          ctx.fillText(`M₁=${M1}kg`, x1 - 24, cy + 4);
+
+          const r2 = Math.min(40, 18 + Math.sqrt(M2) * 0.22);
+          ctx.fillStyle = '#c084fc';
+          ctx.beginPath(); ctx.arc(x2, cy, r2, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#0f172a';
+          ctx.fillText(`M₂=${M2}kg`, x2 - 24, cy + 4);
+
+          drawArrow(x1 + r1 + 2, cy + 22, x1 + r1 + 38, cy + 22, '#34d399', 'F');
+          drawArrow(x2 - r2 - 2, cy + 22, x2 - r2 - 38, cy + 22, '#34d399', 'F');
+
+          const ex = w * 0.85;
+          const ey = cy + 25;
+          ctx.fillStyle = '#1d4ed8';
+          ctx.strokeStyle = '#60a5fa';
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(ex, ey, 38, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 11px "Hind Siliguri", sans-serif';
+          ctx.fillText('পৃথিবী (R)', ex - 22, ey + 4);
+
+          const satY = ey - 50 - Math.min(45, (h_km / 6400) * 45);
+          ctx.fillStyle = '#f43f5e';
+          ctx.beginPath(); ctx.arc(ex, satY, 7, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#fda4af';
+          ctx.fillText(`h=${h_km}km (g'=${fmt(calc.g_height, 2)})`, ex - 52, satY - 10);
+
+          ctx.fillStyle = '#cbd5e1';
+          ctx.font = '12px "Hind Siliguri", sans-serif';
+          ctx.fillText(`মহাকর্ষ বল F = ${fmtSciText(calc.F_grav, 3)} N   |   কেন্দ্রিক দূরত্ব d = ${d} m`, 18, h - 20);
+        }
+      }
+
+      // ---------- NAVIGATION & EVENT LISTENERS ----------
+      function switchMainTab(tab) {
+        state.activeMainTab = tab;
+        const views = {
+          lab: document.getElementById('viewLab'),
+          theory: document.getElementById('viewTheory')
+        };
+        const btns = {
+          lab: document.getElementById('navLabBtn'),
+          theory: document.getElementById('navTheoryBtn')
+        };
+
+        Object.keys(views).forEach(k => {
+          if (k === tab) {
+            views[k].classList.remove('hidden');
+            btns[k].classList.add('active');
+            btns[k].classList.remove('text-slate-700');
+          } else {
+            views[k].classList.add('hidden');
+            btns[k].classList.remove('active');
+            btns[k].classList.add('text-slate-700');
+          }
+        });
+
+        if (tab === 'lab') {
+          resizeCanvas();
+        }
+      }
+
+      document.getElementById('navLabBtn').addEventListener('click', () => switchMainTab('lab'));
+      document.getElementById('navTheoryBtn').addEventListener('click', () => switchMainTab('theory'));
+      document.getElementById('navPdfBtn').addEventListener('click', () => {
+        exportItemsToPdf(buildCurrentTopicPdfItems(), `StudyPulse_${state.activeTopic}_Solutions.pdf`, 'download');
+      });
+
+      // Topic Switch Buttons
+      document.querySelectorAll('.topic-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.topic-tab-btn').forEach(b => {
+            b.classList.remove('active');
+            b.classList.add('bg-slate-50/70', 'text-slate-800');
+          });
+          btn.classList.add('active');
+          btn.classList.remove('bg-slate-50/70', 'text-slate-800');
+
+          state.activeTopic = btn.getAttribute('data-topic');
+          state.activePresetIndex = 0;
+          resetSimulation();
+          syncCustomCqInputsWithTopic();
+          renderPresetsAndSliders();
+          updateAllViews();
+        });
+      });
+
+      // Custom CQ Input & Smart Parser Buttons
+      document.getElementById('parseAndSolveCqBtn').addEventListener('click', parseCustomCqTextAndSyncLab);
+
+      document.getElementById('loadSampleCqBtn').addEventListener('click', () => {
+        const sample = topicConfigs[state.activeTopic].sampleCQ;
+        if (!sample) return;
+        document.getElementById('customStemInput').value = sample.stem;
+        document.getElementById('customQ1Input').value = sample.q1;
+        document.getElementById('customQ2Input').value = sample.q2;
+        parseCustomCqTextAndSyncLab();
+      });
+
+      document.getElementById('clearCustomCqBtn').addEventListener('click', () => {
+        state.customCQ[state.activeTopic] = { stem: '', q1: '', q2: '' };
+        syncCustomCqInputsWithTopic();
+        updateAllViews();
+        showToast('কাস্টম সৃজনশীল প্রশ্ন মুছে ডিফল্ট প্রশ্নে ফিরে যাওয়া হয়েছে।');
+      });
+
+      ['customQ1Input', 'customQ2Input'].forEach(id => {
+        document.getElementById(id).addEventListener('input', () => {
+          state.customCQ[state.activeTopic].q1 = document.getElementById('customQ1Input').value;
+          state.customCQ[state.activeTopic].q2 = document.getElementById('customQ2Input').value;
+          updateAllViews();
+        });
+      });
+
+      // Drop / Toggle Extra Mass on Moving Car (Topic 1)
+      document.getElementById('dropExtraMassBtn').addEventListener('click', () => {
+        const { m, extraMass } = state.friction;
+        state.friction.hasExtraMass = !state.friction.hasExtraMass;
+        if (state.friction.hasExtraMass) {
+          state.friction.dropAnimProg = 0;
+          state.friction.liveVel = (m * state.friction.liveVel) / (m + extraMass);
+          showToast(`চলন্ত গাড়িতে +${extraMass} kg ভর যুক্ত হয়েছে!`);
+          if (!state.isPlaying) {
+            togglePlaySimulation();
+          }
+        } else {
+          state.friction.liveVel = state.friction.u;
+          showToast('অতিরিক্ত ভর সরিয়ে নেওয়া হয়েছে।');
+        }
+        updateExtraMassButtonUI();
+        updateAllViews();
+      });
+
+      // Play / Reset Simulation
+      document.getElementById('simPlayPauseBtn').addEventListener('click', togglePlaySimulation);
+      document.getElementById('simResetBtn').addEventListener('click', resetSimulation);
+
+      // Direct In-Tab PDF Download & Print Buttons (for Active Topic)
+      document.getElementById('quickDownloadTopicPdfBtn').addEventListener('click', () => {
+        exportItemsToPdf(buildCurrentTopicPdfItems(), `StudyPulse_${state.activeTopic}_Solutions.pdf`, 'download');
+      });
+
+      document.getElementById('addAllTopicToPdfBtn').addEventListener('click', () => {
+        exportItemsToPdf(buildCurrentTopicPdfItems(), `StudyPulse_${state.activeTopic}_Solutions.pdf`, 'print');
+      });
+
+      // Direct In-Tab PDF Download & Print Buttons (for Theory Tab)
+      document.getElementById('addTheoryToPdfBtn').addEventListener('click', () => {
+        exportItemsToPdf(buildTheoryPdfItems(), 'StudyPulse_SSC_Physics_Force_Formulas_Theory.pdf', 'download');
+      });
+
+      document.getElementById('printTheoryPdfBtn').addEventListener('click', () => {
+        exportItemsToPdf(buildTheoryPdfItems(), 'StudyPulse_SSC_Physics_Force_Formulas_Theory.pdf', 'print');
+      });
+
+      // Legacy hidden PDF handlers kept for full compatibility
+      document.getElementById('addCurrentTopicToPdfFromSheetBtn').addEventListener('click', addAllCurrentTopicToPdf);
+      document.getElementById('clearPdfQueueBtn').addEventListener('click', () => {
+        state.pdfQueue = [];
+        updatePdfSheetUI();
+      });
+      document.getElementById('downloadPdfFileBtn').addEventListener('click', () => {
+        exportItemsToPdf(buildCurrentTopicPdfItems(), `StudyPulse_${state.activeTopic}_Solutions.pdf`, 'download');
+      });
+      document.getElementById('browserPrintPdfBtn').addEventListener('click', () => {
+        exportItemsToPdf(buildCurrentTopicPdfItems(), `StudyPulse_${state.activeTopic}_Solutions.pdf`, 'print');
+      });
+
+      document.getElementById('studentNameInput').addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        document.getElementById('pdfStudentNameDisplay').textContent = val ? `শিক্ষার্থী: ${val}` : 'শিক্ষার্থী: সাধারণ প্রস্তুতি শিট';
+      });
+
+      // Initialize App on Load
+      window.addEventListener('resize', resizeCanvas);
+      window.addEventListener('load', () => {
+        syncCustomCqInputsWithTopic();
+        renderPresetsAndSliders();
+        updateAllViews();
+        addAllCurrentTopicToPdf();
+        resizeCanvas();
+      });
+    })();
+  </script>
+</body>
+</html>
